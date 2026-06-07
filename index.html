@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FROM</title>
+<style>
+/* ── You Murdered BB via base64 CDN fallback chain ── */
+/* Primary: load from CDN if user has it, else use Cinzel as visual stand-in */
+/* To use the real "You Murdered BB" font, place YouMurderedBB.woff2 next to this HTML file */
+@font-face {
+  font-family: 'You Murdered BB';
+  src: url('YouMurderedBB.woff2') format('woff2'),
+       url('YouMurderedBB.woff') format('woff'),
+       url('YouMurderedBB.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --text-main: #c8d8e8;
+  --text-dim: #7a9ab8;
+  --text-bright: #eaf2fa;
+  --border: rgba(100,140,180,0.22);
+  --bg-deep: #060810;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg-deep);
+  cursor: none;
+}
+
+/* ── BACKGROUND VIDEO ── */
+#bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw; height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── OVERLAYS ── */
+#cinematic-overlay {
+  position: fixed; inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(6,8,16,0.90) 0%,
+    rgba(6,8,16,0.62) 38%,
+    rgba(6,8,16,0.22) 65%,
+    rgba(6,8,16,0.04) 100%
+  );
+  z-index: 1; pointer-events: none;
+}
+#fog-layer {
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 15% 85%, rgba(80,120,190,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 35% at 78% 18%, rgba(50,90,150,0.07) 0%, transparent 55%);
+  z-index: 2; pointer-events: none; will-change: transform;
+}
+#vignette {
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,0.78) 100%);
+  z-index: 2; pointer-events: none;
+}
+/* Cinematic scan-lines for atmosphere */
+#scanlines {
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0.04) 4px
+  );
+  z-index: 3; pointer-events: none; opacity: 0.5;
+}
+
+/* ── APP LAYER ── */
+#app { position: fixed; inset: 0; z-index: 10; }
+
+/* ── TOP BAR ── */
+#topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 44px;
+  z-index: 20;
+}
+
+#hamburger {
+  display: flex; flex-direction: column; gap: 5px;
+  cursor: none; padding: 9px 10px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  background: rgba(6,8,16,0.45);
+  outline: none; transition: border-color 0.3s;
+}
+#hamburger:hover { border-color: rgba(100,160,220,0.45); }
+#hamburger span {
+  display: block; width: 22px; height: 1.5px;
+  background: var(--text-main); transition: all 0.32s;
+}
+#hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+#hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+#hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+#watch-btn {
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-main);
+  background: rgba(6,8,16,0.5);
+  border: 1px solid var(--border);
+  padding: 11px 26px;
+  cursor: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s; outline: none;
+}
+#watch-btn:hover {
+  background: rgba(30,58,95,0.65);
+  border-color: rgba(100,160,220,0.45);
+  color: var(--text-bright);
+  letter-spacing: 5px;
+}
+
+/* ── SLIDE-OUT NAV ── */
+#nav-menu {
+  position: fixed; top: 0; left: 0;
+  width: 290px; height: 100vh;
+  background: rgba(4,6,12,0.98);
+  backdrop-filter: blur(24px);
+  border-right: 1px solid var(--border);
+  z-index: 100;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 60px 44px;
+  transform: translateX(-100%);
+  transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+}
+#nav-menu.open { transform: translateX(0); }
+#nav-logo {
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: 28px;
+  color: var(--text-bright);
+  letter-spacing: 4px;
+  margin-bottom: 40px;
+  opacity: 0.9;
+}
+#nav-menu a {
+  display: block;
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(100,140,180,0.1);
+  cursor: none;
+  transition: color 0.28s, letter-spacing 0.28s, padding-left 0.28s;
+}
+#nav-menu a:hover {
+  color: var(--text-bright);
+  letter-spacing: 6px;
+  padding-left: 6px;
+}
+
+/* ── HERO ── */
+#hero-content {
+  position: absolute;
+  left: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 40%;
+  padding: 0 60px;
+  will-change: transform;
+}
+
+/* SITE NAME: FROM */
+#title-main {
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: clamp(80px, 11vw, 148px);
+  line-height: 0.86;
+  color: var(--text-bright);
+  letter-spacing: 6px;
+  text-shadow:
+    0 0 100px rgba(100,160,255,0.18),
+    0 0 40px rgba(100,160,255,0.10),
+    0 6px 50px rgba(0,0,0,0.9);
+  will-change: transform;
+  margin-bottom: 18px;
+}
+
+#tagline {
+  font-family: 'Crimson Pro', serif;
+  font-style: italic;
+  font-size: clamp(14px, 1.2vw, 17px);
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 42px;
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+#btn-group {
+  display: flex; flex-direction: column;
+  gap: 13px; width: fit-content;
+}
+
+.hero-btn {
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  padding: 14px 36px;
+  cursor: none;
+  transition: all 0.3s;
+  border: none; outline: none;
+}
+#btn-explore {
+  background: rgba(200,216,232,0.96);
+  color: #060810;
+}
+#btn-explore:hover {
+  background: #eaf2fa;
+  transform: translateX(6px);
+  letter-spacing: 5px;
+}
+#btn-details {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+#btn-details:hover {
+  background: rgba(30,58,95,0.42);
+  border-color: rgba(100,160,220,0.45);
+  transform: translateX(6px);
+  letter-spacing: 5px;
+}
+
+/* ── MODAL ── */
+#modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(4,6,12,0.93);
+  backdrop-filter: blur(16px);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+#modal-overlay.open { opacity: 1; pointer-events: all; }
+#modal {
+  background: rgba(8,11,18,0.99);
+  border: 1px solid var(--border);
+  width: min(700px, 92vw);
+  max-height: 82vh;
+  overflow-y: auto;
+  padding: 52px;
+  position: relative;
+}
+#modal-close {
+  position: absolute; top: 22px; right: 26px;
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-dim); cursor: none;
+  background: none; border: none; transition: color 0.3s; outline: none;
+}
+#modal-close:hover { color: var(--text-bright); }
+#modal h2 {
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: 54px; color: var(--text-bright);
+  margin-bottom: 6px; letter-spacing: 4px;
+}
+.modal-sub {
+  font-family: 'Crimson Pro', serif; font-style: italic;
+  font-size: 14px; color: var(--text-dim);
+  margin-bottom: 36px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-section { margin-bottom: 32px; }
+.modal-section h3 {
+  font-family: 'You Murdered BB', 'Cinzel', serif;
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 14px;
+}
+.cast-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 12px; }
+.cast-card {
+  border: 1px solid var(--border); padding: 14px;
+  background: rgba(255,255,255,0.02);
+}
+.cast-card .name { font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text-main); margin-bottom: 4px; }
+.cast-card .role { font-family: 'Crimson Pro', serif; font-size: 12px; font-style: italic; color: var(--text-dim); }
+.row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid rgba(100,140,180,0.08);
+  font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text-main);
+}
+.badge {
+  font-family: 'You Murdered BB', 'Cinzel', serif; font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); border: 1px solid var(--border); padding: 3px 10px;
+}
+.tl { display: flex; gap: 20px; padding: 10px 0; border-bottom: 1px solid rgba(100,140,180,0.06); }
+.tl-date {
+  font-family: 'You Murdered BB', 'Cinzel', serif; font-size: 10px;
+  letter-spacing: 2px; color: var(--text-dim); min-width: 80px; padding-top: 2px;
+}
+.tl-event { font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text-main); }
+
+#modal::-webkit-scrollbar { width: 3px; }
+#modal::-webkit-scrollbar-track { background: transparent; }
+#modal::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ── SPIDER CURSOR ── */
+#spider-cursor {
+  position: fixed; pointer-events: none;
+  z-index: 9999; top: 0; left: 0;
+  will-change: transform;
+}
+
+/* ── VIDEO STATUS BADGE ── */
+#vid-status {
+  position: fixed; bottom: 20px; right: 20px;
+  font-family: 'Cinzel', serif; font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); border: 1px solid var(--border);
+  padding: 5px 12px; background: rgba(6,8,16,0.7);
+  backdrop-filter: blur(8px); z-index: 50;
+  transition: opacity 1s;
+}
+
+@media (max-width: 768px) {
+  #hero-content { width: 92%; padding: 0 24px; }
+  #title-main { font-size: clamp(60px, 18vw, 100px); }
+  #spider-cursor { display: none; }
+  html, body { cursor: auto; }
+  .hero-btn, #hamburger, #watch-btn, #btn-details, #modal-close, #nav-menu a { cursor: pointer; }
+  #modal { padding: 32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND VIDEO -->
+<video id="bg-video" preload="metadata" muted playsinline>
+  <source src="https://rlsxlktphegfsmvyebrs.supabase.co/storage/v1/object/public/videos/lv_0_20260607133346.mp4" type="video/mp4">
+</video>
+
+<div id="cinematic-overlay"></div>
+<div id="fog-layer"></div>
+<div id="vignette"></div>
+<div id="scanlines"></div>
+
+<div id="app">
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <button id="hamburger" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+    <button id="watch-btn">Watch Trailer</button>
+  </div>
+
+  <!-- SLIDE NAV -->
+  <nav id="nav-menu">
+    <div id="nav-logo">FROM</div>
+    <a href="#" onclick="closeNav()">Home</a>
+    <a href="#" onclick="closeNav()">Episodes</a>
+    <a href="#" onclick="closeNav()">Cast</a>
+    <a href="#" onclick="closeNav()">Timeline</a>
+    <a href="#" onclick="closeNav()">Gallery</a>
+    <a href="#" onclick="closeNav()">Contact Developer</a>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero-content">
+    <div id="title-main">FROM</div>
+    <div id="tagline">Where the signal ends and silence begins.</div>
+    <div id="btn-group">
+      <button class="hero-btn" id="btn-explore">Explore Series</button>
+      <button class="hero-btn" id="btn-details" onclick="openModal()">View Details</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEO STATUS -->
+<div id="vid-status">● Move mouse to scrub</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" onclick="closeModalOutside(event)">
+  <div id="modal">
+    <button id="modal-close" onclick="closeModal()">✕ Close</button>
+    <h2>FROM</h2>
+    <div class="modal-sub">A psychological horror series set at the edge of the known.</div>
+
+    <div class="modal-section">
+      <h3>Cast</h3>
+      <div class="cast-grid">
+        <div class="cast-card"><div class="name">Elara Voss</div><div class="role">The Archivist</div></div>
+        <div class="cast-card"><div class="name">Ren Calloway</div><div class="role">Signal Operator</div></div>
+        <div class="cast-card"><div class="name">Mira Solane</div><div class="role">The Witness</div></div>
+        <div class="cast-card"><div class="name">Dr. Haas</div><div class="role">The Keeper</div></div>
+        <div class="cast-card"><div class="name">Jude Fallow</div><div class="role">The Stranger</div></div>
+        <div class="cast-card"><div class="name">Orin Bell</div><div class="role">Voice in Static</div></div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <h3>Seasons</h3>
+      <div class="row"><span>Season 1 — Transmission</span><span class="badge">8 Episodes</span></div>
+      <div class="row"><span>Season 2 — Recursion</span><span class="badge">10 Episodes</span></div>
+      <div class="row"><span>Season 3 — Threshold</span><span class="badge">Upcoming</span></div>
+    </div>
+
+    <div class="modal-section">
+      <h3>Episodes</h3>
+      <div class="row"><span>S1E1 — Origin Signal</span><span class="badge">52 min</span></div>
+      <div class="row"><span>S1E2 — The Hollow Room</span><span class="badge">48 min</span></div>
+      <div class="row"><span>S1E3 — Pale Corridor</span><span class="badge">55 min</span></div>
+      <div class="row"><span>S1E4 — What Remains</span><span class="badge">50 min</span></div>
+      <div class="row"><span>S2E1 — Feedback Loop</span><span class="badge">58 min</span></div>
+      <div class="row"><span>S2E2 — Static Memory</span><span class="badge">51 min</span></div>
+    </div>
+
+    <div class="modal-section">
+      <h3>Release Timeline</h3>
+      <div class="tl"><div class="tl-date">FEB 2024</div><div class="tl-event">Season 1 premiere — worldwide release</div></div>
+      <div class="tl"><div class="tl-date">AUG 2024</div><div class="tl-event">Season 2 launch — director's cut included</div></div>
+      <div class="tl"><div class="tl-date">JAN 2025</div><div class="tl-event">Special episode — "The Signal Below"</div></div>
+      <div class="tl"><div class="tl-date">FALL 2025</div><div class="tl-event">Season 3 begins production</div></div>
+    </div>
+
+    <div class="modal-section">
+      <h3>Upcoming</h3>
+      <div class="tl"><div class="tl-date">2026</div><div class="tl-event">Season 3 — Threshold. Eight-episode final arc.</div></div>
+      <div class="tl"><div class="tl-date">2026</div><div class="tl-event">FROM: Origin — prequel short film</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SPIDER CURSOR SVG -->
+<div id="spider-cursor">
+  <svg width="64" height="64" viewBox="-32 -32 64 64" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <radialGradient id="bodyG" cx="38%" cy="33%" r="62%">
+        <stop offset="0%" stop-color="#9B7B5A"/><stop offset="48%" stop-color="#6C4D28"/><stop offset="100%" stop-color="#2E1A06"/>
+      </radialGradient>
+      <radialGradient id="abdG" cx="38%" cy="28%" r="66%">
+        <stop offset="0%" stop-color="#8A6840"/><stop offset="58%" stop-color="#523418"/><stop offset="100%" stop-color="#1E0C02"/>
+      </radialGradient>
+      <radialGradient id="eyeG" cx="28%" cy="28%" r="72%">
+        <stop offset="0%" stop-color="#FFE866"/><stop offset="100%" stop-color="#C49000"/>
+      </radialGradient>
+    </defs>
+    <!-- Ground shadow -->
+    <ellipse cx="1" cy="23" rx="12" ry="3" fill="rgba(0,0,0,0.28)"/>
+    <!-- LEGS L -->
+    <g id="leg-l1"><line x1="-6" y1="-4" x2="-20" y2="-18" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-20" y1="-18" x2="-31" y2="-10" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <g id="leg-l2"><line x1="-7" y1="0" x2="-23" y2="-8" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-23" y1="-8" x2="-31" y2="3" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <g id="leg-l3"><line x1="-7" y1="4" x2="-23" y2="9" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-23" y1="9" x2="-29" y2="20" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <g id="leg-l4"><line x1="-5" y1="8" x2="-16" y2="19" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-16" y1="19" x2="-20" y2="29" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <!-- LEGS R -->
+    <g id="leg-r1"><line x1="6" y1="-4" x2="20" y2="-18" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="20" y1="-18" x2="31" y2="-10" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <g id="leg-r2"><line x1="7" y1="0" x2="23" y2="-8" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="23" y1="-8" x2="31" y2="3" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <g id="leg-r3"><line x1="7" y1="4" x2="23" y2="9" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="23" y1="9" x2="29" y2="20" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <g id="leg-r4"><line x1="5" y1="8" x2="16" y2="19" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="16" y1="19" x2="20" y2="29" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
+    <!-- Abdomen -->
+    <ellipse cx="0" cy="10" rx="9" ry="13" fill="url(#abdG)"/>
+    <ellipse cx="0" cy="8" rx="3.5" ry="5" fill="rgba(200,140,70,0.22)"/>
+    <ellipse cx="0" cy="14" rx="2.2" ry="3.2" fill="rgba(0,0,0,0.38)"/>
+    <ellipse cx="0" cy="10" rx="9" ry="13" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="0.6"/>
+    <!-- Cephalothorax -->
+    <ellipse cx="0" cy="-4" rx="8" ry="7.2" fill="url(#bodyG)"/>
+    <ellipse cx="0" cy="-4" rx="8" ry="7.2" fill="none" stroke="rgba(0,0,0,0.38)" stroke-width="0.6"/>
+    <!-- Fovea marking -->
+    <line x1="0" y1="-1" x2="0" y2="-6" stroke="rgba(0,0,0,0.35)" stroke-width="0.8"/>
+    <!-- Eyes -->
+    <circle cx="-3.2" cy="-7.2" r="1.9" fill="url(#eyeG)"/>
+    <circle cx="3.2" cy="-7.2" r="1.9" fill="url(#eyeG)"/>
+    <circle cx="-5.2" cy="-5.2" r="1.3" fill="url(#eyeG)" opacity="0.75"/>
+    <circle cx="5.2" cy="-5.2" r="1.3" fill="url(#eyeG)" opacity="0.75"/>
+    <circle cx="-1.6" cy="-9" r="1.1" fill="url(#eyeG)" opacity="0.55"/>
+    <circle cx="1.6" cy="-9" r="1.1" fill="url(#eyeG)" opacity="0.55"/>
+    <circle cx="-2.9" cy="-7.7" r="0.55" fill="rgba(255,255,200,0.9)"/>
+    <circle cx="3.5" cy="-7.7" r="0.55" fill="rgba(255,255,200,0.9)"/>
+    <!-- Chelicerae -->
+    <path d="M -2.6,-11 Q -3.8,-14.5 -2.2,-16" stroke="#2A1800" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M 2.6,-11 Q 3.8,-14.5 2.2,-16" stroke="#2A1800" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <circle cx="-2.2" cy="-16" r="1.4" fill="#180A00"/>
+    <circle cx="2.2" cy="-16" r="1.4" fill="#180A00"/>
+    <!-- Pedipalps -->
+    <path d="M -4.2,-10 Q -7,-13.5 -5.5,-15.5" stroke="#503018" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+    <path d="M 4.2,-10 Q 7,-13.5 5.5,-15.5" stroke="#503018" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<script>
+const video = document.getElementById('bg-video');
+const spider = document.getElementById('spider-cursor');
+const fogLayer = document.getElementById('fog-layer');
+const heroContent = document.getElementById('hero-content');
+const vidStatus = document.getElementById('vid-status');
+
+// Video setup & status feedback
+video.addEventListener('loadedmetadata', () => {
+  vidStatus.textContent = '● Video ready — move mouse to scrub';
+  setTimeout(() => vidStatus.style.opacity = '0', 3000);
+});
+video.addEventListener('error', () => {
+  vidStatus.textContent = '⚠ Video unavailable';
+});
+video.load();
+
+// Mouse tracking
+let mouseX = innerWidth / 2, mouseY = innerHeight / 2;
+let prevX = mouseX, prevY = mouseY;
+let spiderX = mouseX, spiderY = mouseY;
+let spiderAngle = 0, targetAngle = 0;
+let mouseSpeed = 0;
+let isIdle = false, idleTimer = null;
+let targetFLR = 0, frontLR = 0;
+let breathP = 0, legP = 0;
+
+function scrubVideo(x) {
+  if (!video.duration || isNaN(video.duration)) return;
+  // RIGHT = start (0), LEFT = end (duration)
+  video.currentTime = (1 - x / innerWidth) * video.duration;
+}
+
+document.addEventListener('mousemove', e => {
+  prevX = mouseX; prevY = mouseY;
+  mouseX = e.clientX; mouseY = e.clientY;
+  const dx = mouseX - prevX, dy = mouseY - prevY;
+  mouseSpeed = Math.sqrt(dx*dx + dy*dy);
+  if (mouseSpeed > 0.5) targetAngle = Math.atan2(dy, dx) * (180/Math.PI) + 90;
+  isIdle = false;
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { isIdle = true; }, 1400);
+  scrubVideo(mouseX);
+});
+
+document.addEventListener('touchmove', e => {
+  scrubVideo(e.touches[0].clientX);
+}, { passive: true });
+
+// Button hover — spider raises front legs
+document.querySelectorAll('button, a, .hero-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { targetFLR = 1; });
+  el.addEventListener('mouseleave', () => { targetFLR = 0; });
+});
+
+// Leg animation
+const LEGS = {
+  'leg-l1':{x1:-6,y1:-4,mx:-20,my:-18,ex:-31,ey:-10},
+  'leg-l2':{x1:-7,y1:0, mx:-23,my:-8, ex:-31,ey:3},
+  'leg-l3':{x1:-7,y1:4, mx:-23,my:9,  ex:-29,ey:20},
+  'leg-l4':{x1:-5,y1:8, mx:-16,my:19, ex:-20,ey:29},
+  'leg-r1':{x1:6, y1:-4,mx:20, my:-18,ex:31, ey:-10},
+  'leg-r2':{x1:7, y1:0, mx:23, my:-8, ex:31, ey:3},
+  'leg-r3':{x1:7, y1:4, mx:23, my:9,  ex:29, ey:20},
+  'leg-r4':{x1:5, y1:8, mx:16, my:19, ex:20, ey:29},
+};
+
+function moveLeg(id, dx1, dy1, dx2, dy2) {
+  const b = LEGS[id];
+  const g = document.getElementById(id);
+  const ln = g.querySelectorAll('line');
+  ln[0].setAttribute('x2', b.mx + dx1); ln[0].setAttribute('y2', b.my + dy1);
+  ln[1].setAttribute('x1', b.mx + dx1); ln[1].setAttribute('y1', b.my + dy1);
+  ln[1].setAttribute('x2', b.ex + dx2); ln[1].setAttribute('y2', b.ey + dy2);
+}
+
+function loop() {
+  requestAnimationFrame(loop);
+
+  // Spider inertia follow
+  const lag = isIdle ? 0.065 : Math.min(0.16 + mouseSpeed * 0.013, 0.30);
+  spiderX += (mouseX - spiderX) * lag;
+  spiderY += (mouseY - spiderY) * lag;
+
+  // Angle interpolation
+  let diff = targetAngle - spiderAngle;
+  while (diff > 180) diff -= 360;
+  while (diff < -180) diff += 360;
+  spiderAngle += diff * 0.09;
+
+  // Breathing + leg phases
+  breathP += 0.032;
+  const spd = isIdle ? 0 : Math.min(mouseSpeed / 16, 1);
+  legP += spd * 0.24;
+  frontLR += (targetFLR - frontLR) * 0.09;
+
+  const s = a => Math.sin(legP + a) * spd * 3.2;
+  const fr = frontLR * 10;
+
+  moveLeg('leg-l1', 0, s(0)-fr,       0, s(0)-fr*1.6);
+  moveLeg('leg-l2', 0, s(Math.PI),     0, s(Math.PI));
+  moveLeg('leg-l3', 0, s(Math.PI/2),   0, s(Math.PI/2));
+  moveLeg('leg-l4', 0, s(3*Math.PI/2), 0, s(3*Math.PI/2));
+  moveLeg('leg-r1', 0, s(Math.PI)-fr,  0, s(Math.PI)-fr*1.6);
+  moveLeg('leg-r2', 0, s(0),           0, s(0));
+  moveLeg('leg-r3', 0, s(3*Math.PI/2), 0, s(3*Math.PI/2));
+  moveLeg('leg-r4', 0, s(Math.PI/2),   0, s(Math.PI/2));
+
+  const sc = isIdle ? 1 + Math.sin(breathP) * 0.013 : 1 + spd * 0.042;
+  spider.style.transform = `translate(${spiderX-32}px,${spiderY-32}px) rotate(${spiderAngle}deg) scale(${sc})`;
+
+  // Parallax
+  const px = (mouseX / innerWidth  - 0.5) * 13;
+  const py = (mouseY / innerHeight - 0.5) * 9;
+  heroContent.style.transform = `translateY(-50%) translate(${px}px,${py}px)`;
+  fogLayer.style.transform    = `translate(${px*1.8}px,${py*1.2}px)`;
+}
+
+loop();
+
+// Nav
+function toggleNav() {
+  document.getElementById('nav-menu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+function closeNav() {
+  document.getElementById('nav-menu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+function openModal()  { document.getElementById('modal-overlay').classList.add('open'); }
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
+
+if ('ontouchstart' in window) document.getElementById('spider-cursor').style.display = 'none';
+</script>
+</body>
+</html>
