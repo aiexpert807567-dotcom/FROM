@@ -5,373 +5,220 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FROM</title>
 <style>
-/* ── You Murdered BB via base64 CDN fallback chain ── */
-/* Primary: load from CDN if user has it, else use Cinzel as visual stand-in */
-/* To use the real "You Murdered BB" font, place YouMurderedBB.woff2 next to this HTML file */
 @font-face {
   font-family: 'You Murdered BB';
   src: url('YouMurderedBB.woff2') format('woff2'),
        url('YouMurderedBB.woff') format('woff'),
        url('YouMurderedBB.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+  font-weight: normal; font-style: normal; font-display: swap;
 }
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
+* { margin:0; padding:0; box-sizing:border-box; }
 :root {
   --text-main: #c8d8e8;
   --text-dim: #7a9ab8;
   --text-bright: #eaf2fa;
-  --border: rgba(100,140,180,0.22);
   --bg-deep: #060810;
 }
+html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep); cursor:none; }
 
-html, body {
-  width: 100%; height: 100%;
-  overflow: hidden;
-  background: var(--bg-deep);
-  cursor: none;
-}
-
-/* ── BACKGROUND VIDEO ── */
 #bg-video {
-  position: fixed;
-  inset: 0;
-  width: 100vw; height: 100vh;
-  object-fit: cover;
-  z-index: 0;
-  pointer-events: none;
+  position:fixed; inset:0; width:100vw; height:100vh;
+  object-fit:cover; z-index:0; pointer-events:none;
 }
-
-/* ── OVERLAYS ── */
 #cinematic-overlay {
-  position: fixed; inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(6,8,16,0.90) 0%,
-    rgba(6,8,16,0.62) 38%,
-    rgba(6,8,16,0.22) 65%,
-    rgba(6,8,16,0.04) 100%
-  );
-  z-index: 1; pointer-events: none;
+  position:fixed; inset:0;
+  background:linear-gradient(to right,rgba(6,8,16,0.90) 0%,rgba(6,8,16,0.62) 38%,rgba(6,8,16,0.22) 65%,rgba(6,8,16,0.04) 100%);
+  z-index:1; pointer-events:none;
 }
 #fog-layer {
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 40% at 15% 85%, rgba(80,120,190,0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 35% at 78% 18%, rgba(50,90,150,0.07) 0%, transparent 55%);
-  z-index: 2; pointer-events: none; will-change: transform;
+  position:fixed; inset:0;
+  background:radial-gradient(ellipse 80% 40% at 15% 85%,rgba(80,120,190,0.10) 0%,transparent 60%),
+             radial-gradient(ellipse 55% 35% at 78% 18%,rgba(50,90,150,0.07) 0%,transparent 55%);
+  z-index:2; pointer-events:none; will-change:transform;
 }
 #vignette {
-  position: fixed; inset: 0;
-  background: radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,0.78) 100%);
-  z-index: 2; pointer-events: none;
+  position:fixed; inset:0;
+  background:radial-gradient(ellipse at center,transparent 38%,rgba(0,0,0,0.78) 100%);
+  z-index:2; pointer-events:none;
 }
-/* Cinematic scan-lines for atmosphere */
-#scanlines {
-  position: fixed; inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.04) 2px,
-    rgba(0,0,0,0.04) 4px
-  );
-  z-index: 3; pointer-events: none; opacity: 0.5;
-}
-
-/* ── APP LAYER ── */
-#app { position: fixed; inset: 0; z-index: 10; }
+#app { position:fixed; inset:0; z-index:10; }
 
 /* ── TOP BAR ── */
 #topbar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30px 44px;
-  z-index: 20;
+  position:absolute; top:0; left:0; right:0;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:30px 44px; z-index:20;
 }
 
+/* NO BORDER, NO BACKGROUND — pure wood texture only */
 #hamburger {
-  display: flex; flex-direction: column; gap: 5px;
-  cursor: none; padding: 9px 10px;
-  border: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-  background: rgba(6,8,16,0.45);
-  outline: none; transition: border-color 0.3s;
+  display:flex; flex-direction:column; gap:5px;
+  cursor:none; padding:10px 12px;
+  background:none; border:none; outline:none;
 }
-#hamburger:hover { border-color: rgba(100,160,220,0.45); }
 #hamburger span {
-  display: block; width: 22px; height: 1.5px;
-  background: var(--text-main); transition: all 0.32s;
+  display:block; width:22px; height:2px;
+  background:var(--text-main); transition:all 0.32s;
+  box-shadow: none;
 }
-#hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-#hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-#hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+#hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+#hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+#hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
 
 #watch-btn {
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--text-main);
-  background: rgba(6,8,16,0.5);
-  border: 1px solid var(--border);
-  padding: 11px 26px;
-  cursor: none;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s; outline: none;
+  font-family:'You Murdered BB','Cinzel',serif;
+  font-size:11px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--text-main);
+  background:none; border:none; outline:none;
+  cursor:none; padding:8px 0;
+  transition:color 0.3s;
 }
-#watch-btn:hover {
-  background: rgba(30,58,95,0.65);
-  border-color: rgba(100,160,220,0.45);
-  color: var(--text-bright);
-  letter-spacing: 5px;
-}
+#watch-btn:hover { color:var(--text-bright); }
 
-/* ── SLIDE-OUT NAV ── */
+/* ── NAV ── */
 #nav-menu {
-  position: fixed; top: 0; left: 0;
-  width: 290px; height: 100vh;
-  background: rgba(4,6,12,0.98);
-  backdrop-filter: blur(24px);
-  border-right: 1px solid var(--border);
-  z-index: 100;
-  display: flex; flex-direction: column;
-  justify-content: center;
-  padding: 60px 44px;
-  transform: translateX(-100%);
-  transition: transform 0.42s cubic-bezier(0.16,1,0.3,1);
+  position:fixed; top:0; left:0; width:290px; height:100vh;
+  background:rgba(4,6,12,0.98); backdrop-filter:blur(24px);
+  border-right:1px solid rgba(100,140,180,0.12);
+  z-index:100; display:flex; flex-direction:column; justify-content:center;
+  padding:60px 44px;
+  transform:translateX(-100%);
+  transition:transform 0.42s cubic-bezier(0.16,1,0.3,1);
 }
-#nav-menu.open { transform: translateX(0); }
+#nav-menu.open { transform:translateX(0); }
 #nav-logo {
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: 28px;
-  color: var(--text-bright);
-  letter-spacing: 4px;
-  margin-bottom: 40px;
-  opacity: 0.9;
+  font-family:'You Murdered BB','Cinzel',serif;
+  font-size:28px; color:var(--text-bright); letter-spacing:4px; margin-bottom:40px; opacity:0.9;
 }
 #nav-menu a {
-  display: block;
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-decoration: none;
-  padding: 13px 0;
-  border-bottom: 1px solid rgba(100,140,180,0.1);
-  cursor: none;
-  transition: color 0.28s, letter-spacing 0.28s, padding-left 0.28s;
+  display:block; font-family:'You Murdered BB','Cinzel',serif;
+  font-size:11px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--text-dim); text-decoration:none;
+  padding:13px 0; border-bottom:1px solid rgba(100,140,180,0.1);
+  cursor:none; transition:color 0.28s,letter-spacing 0.28s,padding-left 0.28s;
 }
-#nav-menu a:hover {
-  color: var(--text-bright);
-  letter-spacing: 6px;
-  padding-left: 6px;
-}
+#nav-menu a:hover { color:var(--text-bright); letter-spacing:6px; padding-left:6px; }
 
 /* ── HERO ── */
 #hero-content {
-  position: absolute;
-  left: 0; top: 50%;
-  transform: translateY(-50%);
-  width: 40%;
-  padding: 0 60px;
-  will-change: transform;
+  position:absolute; left:0; top:50%; transform:translateY(-50%);
+  width:40%; padding:0 60px; will-change:transform;
 }
 
-/* SITE NAME: FROM */
 #title-main {
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: clamp(80px, 11vw, 148px);
-  line-height: 0.86;
-  color: var(--text-bright);
-  letter-spacing: 6px;
-  text-shadow:
-    0 0 100px rgba(100,160,255,0.18),
-    0 0 40px rgba(100,160,255,0.10),
-    0 6px 50px rgba(0,0,0,0.9);
-  will-change: transform;
-  margin-bottom: 18px;
+  font-family:'You Murdered BB','Cinzel',serif;
+  font-size:clamp(80px,11vw,148px);
+  line-height:0.86;
+  color:var(--text-bright);
+  letter-spacing:6px;
+  /* NO text-shadow highlight — just depth shadow */
+  text-shadow:0 6px 50px rgba(0,0,0,0.9);
+  will-change:transform; margin-bottom:18px;
+  -webkit-text-fill-color:var(--text-bright);
+  background:none;
 }
 
 #tagline {
-  font-family: 'Crimson Pro', serif;
-  font-style: italic;
-  font-size: clamp(14px, 1.2vw, 17px);
-  color: var(--text-dim);
-  letter-spacing: 1px;
-  margin-bottom: 42px;
-  max-width: 280px;
-  line-height: 1.6;
+  font-family:'Crimson Pro',serif; font-style:italic;
+  font-size:clamp(14px,1.2vw,17px);
+  color:var(--text-dim); letter-spacing:1px;
+  margin-bottom:42px; max-width:280px; line-height:1.6;
 }
 
-#btn-group {
-  display: flex; flex-direction: column;
-  gap: 13px; width: fit-content;
-}
+#btn-group { display:flex; flex-direction:column; gap:13px; width:fit-content; }
 
 .hero-btn {
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: 11px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  padding: 14px 36px;
-  cursor: none;
-  transition: all 0.3s;
-  border: none; outline: none;
+  font-family:'You Murdered BB','Cinzel',serif;
+  font-size:11px; letter-spacing:4px; text-transform:uppercase;
+  padding:14px 36px; cursor:none;
+  border:none; outline:none; background:none;
+  transition:all 0.3s;
 }
 #btn-explore {
-  background: rgba(200,216,232,0.96);
-  color: #060810;
+  background:rgba(200,216,232,0.96);
+  color:#060810;
 }
-#btn-explore:hover {
-  background: #eaf2fa;
-  transform: translateX(6px);
-  letter-spacing: 5px;
-}
+#btn-explore:hover { background:#eaf2fa; transform:translateX(6px); letter-spacing:5px; }
 #btn-details {
-  background: transparent;
-  color: var(--text-main);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(10px);
+  background:transparent; color:var(--text-main);
+  border:1px solid rgba(100,140,180,0.22);
 }
-#btn-details:hover {
-  background: rgba(30,58,95,0.42);
-  border-color: rgba(100,160,220,0.45);
-  transform: translateX(6px);
-  letter-spacing: 5px;
-}
+#btn-details:hover { background:rgba(30,58,95,0.42); transform:translateX(6px); letter-spacing:5px; }
 
 /* ── MODAL ── */
 #modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(4,6,12,0.93);
-  backdrop-filter: blur(16px);
-  z-index: 200;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.4s;
+  position:fixed; inset:0; background:rgba(4,6,12,0.93);
+  backdrop-filter:blur(16px); z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity 0.4s;
 }
-#modal-overlay.open { opacity: 1; pointer-events: all; }
+#modal-overlay.open { opacity:1; pointer-events:all; }
 #modal {
-  background: rgba(8,11,18,0.99);
-  border: 1px solid var(--border);
-  width: min(700px, 92vw);
-  max-height: 82vh;
-  overflow-y: auto;
-  padding: 52px;
-  position: relative;
+  background:rgba(8,11,18,0.99); border:1px solid rgba(100,140,180,0.18);
+  width:min(700px,92vw); max-height:82vh; overflow-y:auto; padding:52px; position:relative;
 }
 #modal-close {
-  position: absolute; top: 22px; right: 26px;
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--text-dim); cursor: none;
-  background: none; border: none; transition: color 0.3s; outline: none;
+  position:absolute; top:22px; right:26px;
+  font-family:'You Murdered BB','Cinzel',serif;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--text-dim); cursor:none; background:none; border:none; transition:color 0.3s; outline:none;
 }
-#modal-close:hover { color: var(--text-bright); }
-#modal h2 {
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: 54px; color: var(--text-bright);
-  margin-bottom: 6px; letter-spacing: 4px;
-}
-.modal-sub {
-  font-family: 'Crimson Pro', serif; font-style: italic;
-  font-size: 14px; color: var(--text-dim);
-  margin-bottom: 36px; padding-bottom: 24px;
-  border-bottom: 1px solid var(--border);
-}
-.modal-section { margin-bottom: 32px; }
-.modal-section h3 {
-  font-family: 'You Murdered BB', 'Cinzel', serif;
-  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
-  color: var(--text-dim); margin-bottom: 14px;
-}
-.cast-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 12px; }
-.cast-card {
-  border: 1px solid var(--border); padding: 14px;
-  background: rgba(255,255,255,0.02);
-}
-.cast-card .name { font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text-main); margin-bottom: 4px; }
-.cast-card .role { font-family: 'Crimson Pro', serif; font-size: 12px; font-style: italic; color: var(--text-dim); }
-.row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 0; border-bottom: 1px solid rgba(100,140,180,0.08);
-  font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text-main);
-}
-.badge {
-  font-family: 'You Murdered BB', 'Cinzel', serif; font-size: 9px;
-  letter-spacing: 2px; text-transform: uppercase;
-  color: var(--text-dim); border: 1px solid var(--border); padding: 3px 10px;
-}
-.tl { display: flex; gap: 20px; padding: 10px 0; border-bottom: 1px solid rgba(100,140,180,0.06); }
-.tl-date {
-  font-family: 'You Murdered BB', 'Cinzel', serif; font-size: 10px;
-  letter-spacing: 2px; color: var(--text-dim); min-width: 80px; padding-top: 2px;
-}
-.tl-event { font-family: 'Crimson Pro', serif; font-size: 14px; color: var(--text-main); }
+#modal-close:hover { color:var(--text-bright); }
+#modal h2 { font-family:'You Murdered BB','Cinzel',serif; font-size:54px; color:var(--text-bright); margin-bottom:6px; letter-spacing:4px; }
+.modal-sub { font-family:'Crimson Pro',serif; font-style:italic; font-size:14px; color:var(--text-dim); margin-bottom:36px; padding-bottom:24px; border-bottom:1px solid rgba(100,140,180,0.18); }
+.modal-section { margin-bottom:32px; }
+.modal-section h3 { font-family:'You Murdered BB','Cinzel',serif; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--text-dim); margin-bottom:14px; }
+.cast-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; }
+.cast-card { border:1px solid rgba(100,140,180,0.18); padding:14px; background:rgba(255,255,255,0.02); }
+.cast-card .name { font-family:'Crimson Pro',serif; font-size:14px; color:var(--text-main); margin-bottom:4px; }
+.cast-card .role { font-family:'Crimson Pro',serif; font-size:12px; font-style:italic; color:var(--text-dim); }
+.row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(100,140,180,0.08); font-family:'Crimson Pro',serif; font-size:14px; color:var(--text-main); }
+.badge { font-family:'You Murdered BB','Cinzel',serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); border:1px solid rgba(100,140,180,0.18); padding:3px 10px; }
+.tl { display:flex; gap:20px; padding:10px 0; border-bottom:1px solid rgba(100,140,180,0.06); }
+.tl-date { font-family:'You Murdered BB','Cinzel',serif; font-size:10px; letter-spacing:2px; color:var(--text-dim); min-width:80px; padding-top:2px; }
+.tl-event { font-family:'Crimson Pro',serif; font-size:14px; color:var(--text-main); }
+#modal::-webkit-scrollbar { width:3px; }
+#modal::-webkit-scrollbar-track { background:transparent; }
+#modal::-webkit-scrollbar-thumb { background:rgba(100,140,180,0.22); }
 
-#modal::-webkit-scrollbar { width: 3px; }
-#modal::-webkit-scrollbar-track { background: transparent; }
-#modal::-webkit-scrollbar-thumb { background: var(--border); }
+/* ── SPIDER ── */
+#spider-cursor { position:fixed; pointer-events:none; z-index:9999; top:0; left:0; will-change:transform; }
 
-/* ── SPIDER CURSOR ── */
-#spider-cursor {
-  position: fixed; pointer-events: none;
-  z-index: 9999; top: 0; left: 0;
-  will-change: transform;
-}
-
-/* ── VIDEO STATUS BADGE ── */
 #vid-status {
-  position: fixed; bottom: 20px; right: 20px;
-  font-family: 'Cinzel', serif; font-size: 9px;
-  letter-spacing: 2px; text-transform: uppercase;
-  color: var(--text-dim); border: 1px solid var(--border);
-  padding: 5px 12px; background: rgba(6,8,16,0.7);
-  backdrop-filter: blur(8px); z-index: 50;
-  transition: opacity 1s;
+  position:fixed; bottom:20px; right:20px;
+  font-family:'Cinzel',serif; font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text-dim); padding:5px 12px;
+  background:rgba(6,8,16,0.7); z-index:50; transition:opacity 1.5s;
 }
 
-@media (max-width: 768px) {
-  #hero-content { width: 92%; padding: 0 24px; }
-  #title-main { font-size: clamp(60px, 18vw, 100px); }
-  #spider-cursor { display: none; }
-  html, body { cursor: auto; }
-  .hero-btn, #hamburger, #watch-btn, #btn-details, #modal-close, #nav-menu a { cursor: pointer; }
-  #modal { padding: 32px 20px; }
+@media (max-width:768px) {
+  #hero-content { width:92%; padding:0 24px; }
+  #title-main { font-size:clamp(60px,18vw,100px); }
+  #spider-cursor { display:none; }
+  html,body { cursor:auto; }
+  .hero-btn,#hamburger,#watch-btn,#btn-details,#modal-close,#nav-menu a { cursor:pointer; }
+  #modal { padding:32px 20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- BACKGROUND VIDEO -->
-<video id="bg-video" preload="metadata" muted playsinline>
+<video id="bg-video" preload="auto" muted playsinline>
   <source src="https://rlsxlktphegfsmvyebrs.supabase.co/storage/v1/object/public/videos/lv_0_20260607133346.mp4" type="video/mp4">
 </video>
-
 <div id="cinematic-overlay"></div>
 <div id="fog-layer"></div>
 <div id="vignette"></div>
-<div id="scanlines"></div>
 
 <div id="app">
-  <!-- TOP BAR -->
   <div id="topbar">
     <button id="hamburger" onclick="toggleNav()">
       <span></span><span></span><span></span>
     </button>
     <button id="watch-btn">Watch Trailer</button>
   </div>
-
-  <!-- SLIDE NAV -->
   <nav id="nav-menu">
     <div id="nav-logo">FROM</div>
     <a href="#" onclick="closeNav()">Home</a>
@@ -381,8 +228,6 @@ html, body {
     <a href="#" onclick="closeNav()">Gallery</a>
     <a href="#" onclick="closeNav()">Contact Developer</a>
   </nav>
-
-  <!-- HERO -->
   <div id="hero-content">
     <div id="title-main">FROM</div>
     <div id="tagline">Where the signal ends and silence begins.</div>
@@ -393,16 +238,13 @@ html, body {
   </div>
 </div>
 
-<!-- VIDEO STATUS -->
 <div id="vid-status">● Move mouse to scrub</div>
 
-<!-- MODAL -->
 <div id="modal-overlay" onclick="closeModalOutside(event)">
   <div id="modal">
     <button id="modal-close" onclick="closeModal()">✕ Close</button>
     <h2>FROM</h2>
     <div class="modal-sub">A psychological horror series set at the edge of the known.</div>
-
     <div class="modal-section">
       <h3>Cast</h3>
       <div class="cast-grid">
@@ -414,14 +256,12 @@ html, body {
         <div class="cast-card"><div class="name">Orin Bell</div><div class="role">Voice in Static</div></div>
       </div>
     </div>
-
     <div class="modal-section">
       <h3>Seasons</h3>
       <div class="row"><span>Season 1 — Transmission</span><span class="badge">8 Episodes</span></div>
       <div class="row"><span>Season 2 — Recursion</span><span class="badge">10 Episodes</span></div>
       <div class="row"><span>Season 3 — Threshold</span><span class="badge">Upcoming</span></div>
     </div>
-
     <div class="modal-section">
       <h3>Episodes</h3>
       <div class="row"><span>S1E1 — Origin Signal</span><span class="badge">52 min</span></div>
@@ -431,7 +271,6 @@ html, body {
       <div class="row"><span>S2E1 — Feedback Loop</span><span class="badge">58 min</span></div>
       <div class="row"><span>S2E2 — Static Memory</span><span class="badge">51 min</span></div>
     </div>
-
     <div class="modal-section">
       <h3>Release Timeline</h3>
       <div class="tl"><div class="tl-date">FEB 2024</div><div class="tl-event">Season 1 premiere — worldwide release</div></div>
@@ -439,7 +278,6 @@ html, body {
       <div class="tl"><div class="tl-date">JAN 2025</div><div class="tl-event">Special episode — "The Signal Below"</div></div>
       <div class="tl"><div class="tl-date">FALL 2025</div><div class="tl-event">Season 3 begins production</div></div>
     </div>
-
     <div class="modal-section">
       <h3>Upcoming</h3>
       <div class="tl"><div class="tl-date">2026</div><div class="tl-event">Season 3 — Threshold. Eight-episode final arc.</div></div>
@@ -448,183 +286,474 @@ html, body {
   </div>
 </div>
 
-<!-- SPIDER CURSOR SVG -->
+<!-- REALISTIC SPIDER — larger, IK-driven legs -->
 <div id="spider-cursor">
-  <svg width="64" height="64" viewBox="-32 -32 64 64" xmlns="http://www.w3.org/2000/svg" overflow="visible">
-    <defs>
-      <radialGradient id="bodyG" cx="38%" cy="33%" r="62%">
-        <stop offset="0%" stop-color="#9B7B5A"/><stop offset="48%" stop-color="#6C4D28"/><stop offset="100%" stop-color="#2E1A06"/>
-      </radialGradient>
-      <radialGradient id="abdG" cx="38%" cy="28%" r="66%">
-        <stop offset="0%" stop-color="#8A6840"/><stop offset="58%" stop-color="#523418"/><stop offset="100%" stop-color="#1E0C02"/>
-      </radialGradient>
-      <radialGradient id="eyeG" cx="28%" cy="28%" r="72%">
-        <stop offset="0%" stop-color="#FFE866"/><stop offset="100%" stop-color="#C49000"/>
-      </radialGradient>
-    </defs>
-    <!-- Ground shadow -->
-    <ellipse cx="1" cy="23" rx="12" ry="3" fill="rgba(0,0,0,0.28)"/>
-    <!-- LEGS L -->
-    <g id="leg-l1"><line x1="-6" y1="-4" x2="-20" y2="-18" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-20" y1="-18" x2="-31" y2="-10" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <g id="leg-l2"><line x1="-7" y1="0" x2="-23" y2="-8" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-23" y1="-8" x2="-31" y2="3" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <g id="leg-l3"><line x1="-7" y1="4" x2="-23" y2="9" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-23" y1="9" x2="-29" y2="20" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <g id="leg-l4"><line x1="-5" y1="8" x2="-16" y2="19" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="-16" y1="19" x2="-20" y2="29" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <!-- LEGS R -->
-    <g id="leg-r1"><line x1="6" y1="-4" x2="20" y2="-18" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="20" y1="-18" x2="31" y2="-10" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <g id="leg-r2"><line x1="7" y1="0" x2="23" y2="-8" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="23" y1="-8" x2="31" y2="3" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <g id="leg-r3"><line x1="7" y1="4" x2="23" y2="9" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="23" y1="9" x2="29" y2="20" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <g id="leg-r4"><line x1="5" y1="8" x2="16" y2="19" stroke="#3A210C" stroke-width="1.9" stroke-linecap="round"/><line x1="16" y1="19" x2="20" y2="29" stroke="#3A210C" stroke-width="1.5" stroke-linecap="round"/></g>
-    <!-- Abdomen -->
-    <ellipse cx="0" cy="10" rx="9" ry="13" fill="url(#abdG)"/>
-    <ellipse cx="0" cy="8" rx="3.5" ry="5" fill="rgba(200,140,70,0.22)"/>
-    <ellipse cx="0" cy="14" rx="2.2" ry="3.2" fill="rgba(0,0,0,0.38)"/>
-    <ellipse cx="0" cy="10" rx="9" ry="13" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="0.6"/>
-    <!-- Cephalothorax -->
-    <ellipse cx="0" cy="-4" rx="8" ry="7.2" fill="url(#bodyG)"/>
-    <ellipse cx="0" cy="-4" rx="8" ry="7.2" fill="none" stroke="rgba(0,0,0,0.38)" stroke-width="0.6"/>
-    <!-- Fovea marking -->
-    <line x1="0" y1="-1" x2="0" y2="-6" stroke="rgba(0,0,0,0.35)" stroke-width="0.8"/>
-    <!-- Eyes -->
-    <circle cx="-3.2" cy="-7.2" r="1.9" fill="url(#eyeG)"/>
-    <circle cx="3.2" cy="-7.2" r="1.9" fill="url(#eyeG)"/>
-    <circle cx="-5.2" cy="-5.2" r="1.3" fill="url(#eyeG)" opacity="0.75"/>
-    <circle cx="5.2" cy="-5.2" r="1.3" fill="url(#eyeG)" opacity="0.75"/>
-    <circle cx="-1.6" cy="-9" r="1.1" fill="url(#eyeG)" opacity="0.55"/>
-    <circle cx="1.6" cy="-9" r="1.1" fill="url(#eyeG)" opacity="0.55"/>
-    <circle cx="-2.9" cy="-7.7" r="0.55" fill="rgba(255,255,200,0.9)"/>
-    <circle cx="3.5" cy="-7.7" r="0.55" fill="rgba(255,255,200,0.9)"/>
-    <!-- Chelicerae -->
-    <path d="M -2.6,-11 Q -3.8,-14.5 -2.2,-16" stroke="#2A1800" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-    <path d="M 2.6,-11 Q 3.8,-14.5 2.2,-16" stroke="#2A1800" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-    <circle cx="-2.2" cy="-16" r="1.4" fill="#180A00"/>
-    <circle cx="2.2" cy="-16" r="1.4" fill="#180A00"/>
-    <!-- Pedipalps -->
-    <path d="M -4.2,-10 Q -7,-13.5 -5.5,-15.5" stroke="#503018" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-    <path d="M 4.2,-10 Q 7,-13.5 5.5,-15.5" stroke="#503018" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-  </svg>
+<svg id="spsvg" width="120" height="120" viewBox="-60 -60 120 120" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+<defs>
+  <radialGradient id="cG" cx="35%" cy="28%" r="65%">
+    <stop offset="0%" stop-color="#7B5A30"/>
+    <stop offset="40%" stop-color="#3E2410"/>
+    <stop offset="100%" stop-color="#0A0400"/>
+  </radialGradient>
+  <radialGradient id="aG" cx="32%" cy="25%" r="68%">
+    <stop offset="0%" stop-color="#6A4820"/>
+    <stop offset="45%" stop-color="#2E1608"/>
+    <stop offset="100%" stop-color="#080200"/>
+  </radialGradient>
+  <radialGradient id="eG" cx="25%" cy="25%" r="75%">
+    <stop offset="0%" stop-color="#E0FF00"/>
+    <stop offset="50%" stop-color="#88CC00"/>
+    <stop offset="100%" stop-color="#336600"/>
+  </radialGradient>
+  <radialGradient id="eGlow" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="rgba(160,255,0,0.5)"/>
+    <stop offset="100%" stop-color="rgba(160,255,0,0)"/>
+  </radialGradient>
+  <linearGradient id="lG" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#4A2810"/>
+    <stop offset="50%" stop-color="#1E0C04"/>
+    <stop offset="100%" stop-color="#0A0400"/>
+  </linearGradient>
+  <linearGradient id="fG" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" stop-color="#2A1808"/>
+    <stop offset="70%" stop-color="#0C0400"/>
+    <stop offset="100%" stop-color="#5A0000"/>
+  </linearGradient>
+</defs>
+
+<!-- Shadow -->
+<ellipse cx="2" cy="30" rx="22" ry="5" fill="rgba(0,0,0,0.32)"/>
+
+<!-- 8 LEGS — each has 3 SVG lines (femur / tibia / tarsus) controlled by JS IK -->
+<!-- LEFT legs -->
+<g id="LL1">
+  <line id="LL1_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LL1_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LL1_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+  <!-- spines -->
+  <line id="LL1_sp1" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
+  <line id="LL1_sp2" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
+</g>
+<g id="LL2">
+  <line id="LL2_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LL2_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LL2_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+</g>
+<g id="LL3">
+  <line id="LL3_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LL3_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LL3_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+</g>
+<g id="LL4">
+  <line id="LL4_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LL4_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LL4_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+</g>
+<!-- RIGHT legs -->
+<g id="LR1">
+  <line id="LR1_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LR1_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LR1_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+  <line id="LR1_sp1" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
+  <line id="LR1_sp2" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
+</g>
+<g id="LR2">
+  <line id="LR2_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LR2_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LR2_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+</g>
+<g id="LR3">
+  <line id="LR3_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LR3_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LR3_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+</g>
+<g id="LR4">
+  <line id="LR4_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
+  <line id="LR4_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
+  <line id="LR4_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
+</g>
+
+<!-- BODY drawn on top of legs -->
+<!-- Pedicel -->
+<ellipse cx="0" cy="2" rx="3" ry="4" fill="#0C0400"/>
+<!-- Abdomen -->
+<ellipse cx="0" cy="16" rx="13" ry="18" fill="url(#aG)"/>
+<ellipse cx="-4" cy="9"  rx="5" ry="6"  fill="rgba(100,65,20,0.20)"/>
+<path d="M 0,9 Q 4,13 0,18 Q -4,13 0,9Z" fill="rgba(50,15,0,0.45)"/>
+<ellipse cx="0" cy="22" rx="3.5" ry="5" fill="rgba(0,0,0,0.4)"/>
+<ellipse cx="0" cy="16" rx="13" ry="18" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+<!-- Spinnerets -->
+<ellipse cx="-2.5" cy="32" rx="2.5" ry="1.8" fill="#080200"/>
+<ellipse cx="2.5"  cy="32" rx="2.5" ry="1.8" fill="#080200"/>
+<!-- Cephalothorax -->
+<ellipse cx="0" cy="-6" rx="11" ry="10" fill="url(#cG)"/>
+<line x1="0" y1="-2" x2="0" y2="-12" stroke="rgba(0,0,0,0.45)" stroke-width="1.2"/>
+<ellipse cx="-3" cy="-10" rx="4" ry="3" fill="rgba(130,85,35,0.18)" transform="rotate(-15,-3,-10)"/>
+<ellipse cx="0" cy="-6" rx="11" ry="10" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
+<!-- Body hairs -->
+<g opacity="0.35" stroke="#5A3010" stroke-width="0.8" stroke-linecap="round">
+  <line x1="-10" y1="-6"  x2="-14" y2="-8"/>
+  <line x1="-10" y1="-2"  x2="-14" y2="-3"/>
+  <line x1="-10" y1="2"   x2="-13" y2="3"/>
+  <line x1="10"  y1="-6"  x2="14"  y2="-8"/>
+  <line x1="10"  y1="-2"  x2="14"  y2="-3"/>
+  <line x1="10"  y1="2"   x2="13"  y2="3"/>
+  <line x1="-12" y1="12"  x2="-15" y2="11"/>
+  <line x1="-12" y1="17"  x2="-15" y2="17"/>
+  <line x1="-11" y1="22"  x2="-14" y2="23"/>
+  <line x1="12"  y1="12"  x2="15"  y2="11"/>
+  <line x1="12"  y1="17"  x2="15"  y2="17"/>
+  <line x1="11"  y1="22"  x2="14"  y2="23"/>
+</g>
+<!-- EYES — 8, glowing yellow-green -->
+<circle cx="-4"   cy="-12" r="4.5" fill="url(#eGlow)" opacity="0.9"/>
+<circle cx="4"    cy="-12" r="4.5" fill="url(#eGlow)" opacity="0.9"/>
+<circle cx="-4"   cy="-12" r="2.6" fill="url(#eG)"/>
+<circle cx="4"    cy="-12" r="2.6" fill="url(#eG)"/>
+<circle cx="-4"   cy="-12" r="1.2" fill="#000"/>
+<circle cx="4"    cy="-12" r="1.2" fill="#000"/>
+<circle cx="-4.6" cy="-12.6" r="0.65" fill="rgba(255,255,200,0.95)"/>
+<circle cx="3.4"  cy="-12.6" r="0.65" fill="rgba(255,255,200,0.95)"/>
+<circle cx="-8"   cy="-9"  r="1.9" fill="url(#eG)" opacity="0.8"/>
+<circle cx="8"    cy="-9"  r="1.9" fill="url(#eG)" opacity="0.8"/>
+<circle cx="-8"   cy="-9"  r="0.8" fill="#000"/>
+<circle cx="8"    cy="-9"  r="0.8" fill="#000"/>
+<circle cx="-2"   cy="-15" r="1.4" fill="url(#eG)" opacity="0.6"/>
+<circle cx="2"    cy="-15" r="1.4" fill="url(#eG)" opacity="0.6"/>
+<circle cx="-2"   cy="-15" r="0.6" fill="#000"/>
+<circle cx="2"    cy="-15" r="0.6" fill="#000"/>
+<!-- Chelicerae -->
+<path d="M -3.5,-16 Q -5.5,-21 -4,-24" stroke="url(#fG)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<path d="M 3.5,-16  Q 5.5,-21  4,-24"  stroke="url(#fG)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+<circle cx="-4" cy="-24" r="2.0" fill="#0C0200"/>
+<circle cx="4"  cy="-24" r="2.0" fill="#0C0200"/>
+<circle cx="-4" cy="-25.5" r="1.0" fill="rgba(80,200,0,0.55)"/>
+<circle cx="4"  cy="-25.5" r="1.0" fill="rgba(80,200,0,0.55)"/>
+<!-- Pedipalps -->
+<path d="M -6,-15 Q -10,-20 -8.5,-23" stroke="#3A2010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<path d="M 6,-15  Q 10,-20  8.5,-23"  stroke="#3A2010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<circle cx="-8.5" cy="-23" r="1.7" fill="#200800"/>
+<circle cx="8.5"  cy="-23" r="1.7" fill="#200800"/>
+</svg>
 </div>
 
 <script>
+'use strict';
+
+/* ═══════════════════════════════════════════════
+   VIDEO — INSTANT SEEK
+   Use a shadow time tracker to avoid seek-on-every-frame.
+   Cap seeks to ~30/sec so browser doesn't choke.
+═══════════════════════════════════════════════ */
 const video = document.getElementById('bg-video');
-const spider = document.getElementById('spider-cursor');
-const fogLayer = document.getElementById('fog-layer');
-const heroContent = document.getElementById('hero-content');
 const vidStatus = document.getElementById('vid-status');
 
-// Video setup & status feedback
+let videoDuration = 0;
+let lastSeeked = -1;
+let lastSeekTime = 0;
+const SEEK_INTERVAL = 1000 / 40; // max 40 seeks/sec
+
 video.addEventListener('loadedmetadata', () => {
-  vidStatus.textContent = '● Video ready — move mouse to scrub';
-  setTimeout(() => vidStatus.style.opacity = '0', 3000);
+  videoDuration = video.duration;
+  vidStatus.textContent = '● Loaded — move mouse to scrub';
+  setTimeout(() => { vidStatus.style.opacity = '0'; }, 3000);
 });
-video.addEventListener('error', () => {
-  vidStatus.textContent = '⚠ Video unavailable';
-});
+video.addEventListener('error', () => { vidStatus.textContent = '⚠ Video unavailable'; });
 video.load();
 
-// Mouse tracking
-let mouseX = innerWidth / 2, mouseY = innerHeight / 2;
-let prevX = mouseX, prevY = mouseY;
-let spiderX = mouseX, spiderY = mouseY;
-let spiderAngle = 0, targetAngle = 0;
-let mouseSpeed = 0;
-let isIdle = false, idleTimer = null;
-let targetFLR = 0, frontLR = 0;
-let breathP = 0, legP = 0;
-
-function scrubVideo(x) {
-  if (!video.duration || isNaN(video.duration)) return;
-  // RIGHT = start (0), LEFT = end (duration)
-  video.currentTime = (1 - x / innerWidth) * video.duration;
-}
+/* ═══════════════════════════════════════════════
+   MOUSE
+═══════════════════════════════════════════════ */
+let mx = innerWidth / 2, my = innerHeight / 2;
+let pmx = mx, pmy = my;
+let rawSpeed = 0;
 
 document.addEventListener('mousemove', e => {
-  prevX = mouseX; prevY = mouseY;
-  mouseX = e.clientX; mouseY = e.clientY;
-  const dx = mouseX - prevX, dy = mouseY - prevY;
-  mouseSpeed = Math.sqrt(dx*dx + dy*dy);
-  if (mouseSpeed > 0.5) targetAngle = Math.atan2(dy, dx) * (180/Math.PI) + 90;
-  isIdle = false;
-  clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => { isIdle = true; }, 1400);
-  scrubVideo(mouseX);
-});
-
-document.addEventListener('touchmove', e => {
-  scrubVideo(e.touches[0].clientX);
+  pmx = mx; pmy = my;
+  mx = e.clientX; my = e.clientY;
+  const dx = mx - pmx, dy = my - pmy;
+  rawSpeed = Math.sqrt(dx * dx + dy * dy);
 }, { passive: true });
 
-// Button hover — spider raises front legs
-document.querySelectorAll('button, a, .hero-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => { targetFLR = 1; });
-  el.addEventListener('mouseleave', () => { targetFLR = 0; });
-});
+document.addEventListener('touchmove', e => {
+  mx = e.touches[0].clientX;
+  my = e.touches[0].clientY;
+}, { passive: true });
 
-// Leg animation
-const LEGS = {
-  'leg-l1':{x1:-6,y1:-4,mx:-20,my:-18,ex:-31,ey:-10},
-  'leg-l2':{x1:-7,y1:0, mx:-23,my:-8, ex:-31,ey:3},
-  'leg-l3':{x1:-7,y1:4, mx:-23,my:9,  ex:-29,ey:20},
-  'leg-l4':{x1:-5,y1:8, mx:-16,my:19, ex:-20,ey:29},
-  'leg-r1':{x1:6, y1:-4,mx:20, my:-18,ex:31, ey:-10},
-  'leg-r2':{x1:7, y1:0, mx:23, my:-8, ex:31, ey:3},
-  'leg-r3':{x1:7, y1:4, mx:23, my:9,  ex:29, ey:20},
-  'leg-r4':{x1:5, y1:8, mx:16, my:19, ex:20, ey:29},
+/* ═══════════════════════════════════════════════
+   SPIDER — IK SYSTEM
+═══════════════════════════════════════════════ */
+const spiderEl = document.getElementById('spider-cursor');
+const SVG_CX = 60, SVG_CY = 60; // viewBox centre offset
+
+// Spider body world pos (smooth)
+let bx = mx, by = my;
+let bAngle = 0, tAngle = 0;
+let idleBreath = 0;
+let isIdle = false, idleT = null;
+let frontRaise = 0, tFrontRaise = 0;
+let smoothSpeed = 0;
+
+// Leg attachment points relative to body centre (SVG local coords)
+// (before rotation)
+const ATTACH = {
+  LL1: { lx: -9,  ly: -9  },
+  LL2: { lx: -11, ly: -2  },
+  LL3: { lx: -11, ly:  5  },
+  LL4: { lx: -9,  ly:  12 },
+  LR1: { lx:  9,  ly: -9  },
+  LR2: { lx:  11, ly: -2  },
+  LR3: { lx:  11, ly:  5  },
+  LR4: { lx:  9,  ly:  12 }
 };
 
-function moveLeg(id, dx1, dy1, dx2, dy2) {
-  const b = LEGS[id];
-  const g = document.getElementById(id);
-  const ln = g.querySelectorAll('line');
-  ln[0].setAttribute('x2', b.mx + dx1); ln[0].setAttribute('y2', b.my + dy1);
-  ln[1].setAttribute('x1', b.mx + dx1); ln[1].setAttribute('y1', b.my + dy1);
-  ln[1].setAttribute('x2', b.ex + dx2); ln[1].setAttribute('y2', b.ey + dy2);
+// Leg segment lengths
+const L1 = 20, L2 = 19, L3 = 8;
+
+// Rest foot positions relative to body (before rotation)
+const REST = {
+  LL1: { rx: -28, ry: -26 },
+  LL2: { rx: -36, ry:  -4 },
+  LL3: { rx: -34, ry:  20 },
+  LL4: { rx: -26, ry:  36 },
+  LR1: { rx:  28, ry: -26 },
+  LR2: { rx:  36, ry:  -4 },
+  LR3: { rx:  34, ry:  20 },
+  LR4: { rx:  26, ry:  36 }
+};
+
+// Alternating tetrapod gait
+const GRP_A = ['LL1', 'LR2', 'LL3', 'LR4'];
+const GRP_B = ['LR1', 'LL2', 'LR3', 'LL4'];
+let grpATurn = true;
+let stepCooldown = 0;
+
+const STEP_TRIGGER = 16; // px from ideal before step triggers
+const STEP_DUR_BASE = 0.14; // seconds (fast)
+const LEG_LIFT_H = 8;
+
+// Foot state
+const foot = {};
+Object.keys(REST).forEach(id => {
+  const r = REST[id];
+  foot[id] = {
+    wx: bx + r.rx, wy: by + r.ry,
+    tx: bx + r.rx, ty: by + r.ry,
+    px: bx + r.rx, py: by + r.ry,
+    stepping: false, t: 0, lift: 0
+  };
+});
+
+function rotPt(x, y, a) {
+  const c = Math.cos(a), s = Math.sin(a);
+  return { x: x * c - y * s, y: x * s + y * c };
 }
 
-function loop() {
+function idealFoot(id) {
+  const r = REST[id];
+  const rad = bAngle * Math.PI / 180;
+  // look-ahead: place foot slightly ahead of travel
+  const vx = (mx - bx) * 0.08;
+  const vy = (my - by) * 0.08;
+  const rp = rotPt(r.rx, r.ry, rad);
+  return { x: bx + rp.x + vx, y: by + rp.y + vy };
+}
+
+function dist2(ax, ay, bx2, by2) {
+  const dx = ax - bx2, dy = ay - by2;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function triggerStep(id) {
+  const ideal = idealFoot(id);
+  foot[id].px = foot[id].wx;
+  foot[id].py = foot[id].wy;
+  foot[id].tx = ideal.x;
+  foot[id].ty = ideal.y;
+  foot[id].stepping = true;
+  foot[id].t = 0;
+}
+
+// 2-bone IK: returns knee/elbow joint position
+function solveIK(ax, ay, fx, fy, l1, l2) {
+  const dx = fx - ax, dy = fy - ay;
+  let d = Math.sqrt(dx * dx + dy * dy);
+  d = Math.min(d, l1 + l2 - 0.01);
+  const cosA = (d * d + l1 * l1 - l2 * l2) / (2 * d * l1);
+  const a1 = Math.acos(Math.max(-1, Math.min(1, cosA)));
+  const baseA = Math.atan2(dy, dx);
+  return {
+    kx: ax + l1 * Math.cos(baseA - a1),
+    ky: ay + l1 * Math.sin(baseA - a1)
+  };
+}
+
+// Write one leg's three line segments into SVG
+function writeLeg(id, ax, ay, fx, fy, liftPx) {
+  const fya = fy - liftPx;
+  const { kx, ky } = solveIK(ax, ay, fx, fya, L1, L2);
+  // tarsus tip direction
+  const ta = Math.atan2(fya - ky, fx - kx);
+  const tx = fx + Math.cos(ta) * L3;
+  const ty = fya + Math.sin(ta) * L3;
+
+  const setL = (el, x1, y1, x2, y2) => {
+    el.setAttribute('x1', (x1 + SVG_CX).toFixed(2));
+    el.setAttribute('y1', (y1 + SVG_CY).toFixed(2));
+    el.setAttribute('x2', (x2 + SVG_CX).toFixed(2));
+    el.setAttribute('y2', (y2 + SVG_CY).toFixed(2));
+  };
+
+  setL(document.getElementById(id + '_f'), ax, ay, kx, ky);
+  setL(document.getElementById(id + '_t'), kx, ky, fx, fya);
+  setL(document.getElementById(id + '_s'), fx, fya, tx, ty);
+
+  // Spines on front legs (L1 / R1)
+  if (id === 'LL1' || id === 'LR1') {
+    const sp1 = document.getElementById(id + '_sp1');
+    const sp2 = document.getElementById(id + '_sp2');
+    if (sp1 && sp2) {
+      // Spines perpendicular to femur, mid-point
+      const femA = Math.atan2(ky - ay, kx - ax);
+      const perp = femA + Math.PI / 2;
+      const mx1 = (ax + kx) / 2, my1 = (ay + ky) / 2;
+      setL(sp1, mx1, my1, mx1 + Math.cos(perp) * 4, my1 + Math.sin(perp) * 4);
+      const mx2 = (kx * 0.7 + ax * 0.3), my2 = (ky * 0.7 + ay * 0.3);
+      setL(sp2, mx2, my2, mx2 + Math.cos(perp) * 3, my2 + Math.sin(perp) * 3);
+    }
+  }
+}
+
+const fogLayer = document.getElementById('fog-layer');
+const heroContent = document.getElementById('hero-content');
+
+let lastTime = performance.now();
+
+function loop(now) {
   requestAnimationFrame(loop);
+  const dt = Math.min((now - lastTime) / 1000, 0.05);
+  lastTime = now;
 
-  // Spider inertia follow
-  const lag = isIdle ? 0.065 : Math.min(0.16 + mouseSpeed * 0.013, 0.30);
-  spiderX += (mouseX - spiderX) * lag;
-  spiderY += (mouseY - spiderY) * lag;
+  /* ── VIDEO SEEK — instant, throttled ── */
+  if (videoDuration > 0) {
+    const targetTime = (1 - mx / innerWidth) * videoDuration;
+    const nowMs = performance.now();
+    if (Math.abs(targetTime - lastSeeked) > 0.02 && nowMs - lastSeekTime > SEEK_INTERVAL) {
+      video.currentTime = targetTime;
+      lastSeeked = targetTime;
+      lastSeekTime = nowMs;
+    }
+  }
 
-  // Angle interpolation
-  let diff = targetAngle - spiderAngle;
-  while (diff > 180) diff -= 360;
-  while (diff < -180) diff += 360;
-  spiderAngle += diff * 0.09;
+  /* ── SPIDER BODY FOLLOW ── */
+  smoothSpeed += (rawSpeed - smoothSpeed) * 0.3;
+  const spd01 = Math.min(smoothSpeed / 18, 1);
+  const lag = isIdle ? 0.06 : Math.min(0.18 + spd01 * 0.14, 0.32);
+  bx += (mx - bx) * lag;
+  by += (my - by) * lag;
 
-  // Breathing + leg phases
-  breathP += 0.032;
-  const spd = isIdle ? 0 : Math.min(mouseSpeed / 16, 1);
-  legP += spd * 0.24;
-  frontLR += (targetFLR - frontLR) * 0.09;
+  /* ── ANGLE ── */
+  if (smoothSpeed > 1) {
+    const a = Math.atan2(my - (by - (my - by) * 0.1), mx - (bx - (mx - bx) * 0.1)) * 180 / Math.PI + 90;
+    let d = a - bAngle;
+    while (d > 180) d -= 360; while (d < -180) d += 360;
+    tAngle = bAngle + d;
+  }
+  let ad = tAngle - bAngle;
+  while (ad > 180) ad -= 360; while (ad < -180) ad += 360;
+  bAngle += ad * Math.min(0.12 + spd01 * 0.08, 0.2);
 
-  const s = a => Math.sin(legP + a) * spd * 3.2;
-  const fr = frontLR * 10;
+  /* ── IDLE / BREATH ── */
+  idleBreath += 0.028;
+  frontRaise += (tFrontRaise - frontRaise) * 0.1;
 
-  moveLeg('leg-l1', 0, s(0)-fr,       0, s(0)-fr*1.6);
-  moveLeg('leg-l2', 0, s(Math.PI),     0, s(Math.PI));
-  moveLeg('leg-l3', 0, s(Math.PI/2),   0, s(Math.PI/2));
-  moveLeg('leg-l4', 0, s(3*Math.PI/2), 0, s(3*Math.PI/2));
-  moveLeg('leg-r1', 0, s(Math.PI)-fr,  0, s(Math.PI)-fr*1.6);
-  moveLeg('leg-r2', 0, s(0),           0, s(0));
-  moveLeg('leg-r3', 0, s(3*Math.PI/2), 0, s(3*Math.PI/2));
-  moveLeg('leg-r4', 0, s(Math.PI/2),   0, s(Math.PI/2));
+  /* ── STEPPING GAIT ── */
+  const stepDur = Math.max(0.10, 0.20 - spd01 * 0.10);
+  if (stepCooldown > 0) stepCooldown -= dt;
 
-  const sc = isIdle ? 1 + Math.sin(breathP) * 0.013 : 1 + spd * 0.042;
-  spider.style.transform = `translate(${spiderX-32}px,${spiderY-32}px) rotate(${spiderAngle}deg) scale(${sc})`;
+  if (stepCooldown <= 0 && spd01 > 0.04) {
+    const grp = grpATurn ? GRP_A : GRP_B;
+    let anyNeeded = false;
+    grp.forEach(id => {
+      if (!foot[id].stepping) {
+        const ideal = idealFoot(id);
+        if (dist2(foot[id].wx, foot[id].wy, ideal.x, ideal.y) > STEP_TRIGGER) {
+          anyNeeded = true;
+        }
+      }
+    });
+    if (anyNeeded) {
+      grp.forEach(id => { if (!foot[id].stepping) triggerStep(id); });
+      grpATurn = !grpATurn;
+      stepCooldown = stepDur * 0.55;
+    }
+  }
 
-  // Parallax
-  const px = (mouseX / innerWidth  - 0.5) * 13;
-  const py = (mouseY / innerHeight - 0.5) * 9;
-  heroContent.style.transform = `translateY(-50%) translate(${px}px,${py}px)`;
-  fogLayer.style.transform    = `translate(${px*1.8}px,${py*1.2}px)`;
+  /* ── ADVANCE STEPS ── */
+  Object.keys(foot).forEach(id => {
+    const f = foot[id];
+    if (f.stepping) {
+      f.t += dt / stepDur;
+      if (f.t >= 1) { f.t = 1; f.stepping = false; f.wx = f.tx; f.wy = f.ty; }
+      else {
+        const ease = f.t < 0.5 ? 2 * f.t * f.t : 1 - Math.pow(-2 * f.t + 2, 2) / 2;
+        f.wx = f.px + (f.tx - f.px) * ease;
+        f.wy = f.py + (f.ty - f.py) * ease;
+        f.lift = LEG_LIFT_H * Math.sin(f.t * Math.PI) * (1 + spd01 * 0.5);
+      }
+    } else {
+      f.lift *= 0.75;
+      // Idle micro-twitch
+      if (isIdle) {
+        const ideal = idealFoot(id);
+        f.wx += (ideal.x - f.wx) * 0.04;
+        f.wy += (ideal.y - f.wy) * 0.04;
+      }
+    }
+  });
+
+  /* ── RENDER LEGS (in SVG-local space = world - body + origin) ── */
+  const rad = bAngle * Math.PI / 180;
+  Object.keys(ATTACH).forEach(id => {
+    const a = ATTACH[id];
+    const rp = rotPt(a.lx, a.ly, rad);
+    // SVG-local attach (relative to spider SVG origin = bx,by)
+    const lax = rp.x;
+    const lay = rp.y;
+    // SVG-local foot
+    const lfx = foot[id].wx - bx;
+    const lfy = foot[id].wy - by;
+
+    let extraLift = 0;
+    if ((id === 'LL1' || id === 'LR1') && frontRaise > 0) extraLift = frontRaise * 14;
+
+    writeLeg(id, lax, lay, lfx, lfy, foot[id].lift + extraLift);
+  });
+
+  /* ── TRANSFORM SPIDER ── */
+  const sc = isIdle ? 1 + Math.sin(idleBreath) * 0.014 : 1 + spd01 * 0.04;
+  spiderEl.style.transform =
+    `translate(${(bx - SVG_CX).toFixed(1)}px,${(by - SVG_CY).toFixed(1)}px) scale(${sc.toFixed(3)})`;
+
+  /* ── PARALLAX ── */
+  const px = (mx / innerWidth  - 0.5) * 14;
+  const py = (my / innerHeight - 0.5) * 9;
+  heroContent.style.transform = `translateY(-50%) translate(${px.toFixed(1)}px,${py.toFixed(1)}px)`;
+  fogLayer.style.transform    = `translate(${(px * 1.8).toFixed(1)}px,${(py * 1.2).toFixed(1)}px)`;
 }
 
-loop();
+requestAnimationFrame(loop);
 
-// Nav
+/* ── NAV / MODAL ── */
+document.querySelectorAll('button,a,.hero-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { tFrontRaise = 1; });
+  el.addEventListener('mouseleave', () => { tFrontRaise = 0; });
+});
+document.addEventListener('mousemove', () => {
+  isIdle = false; clearTimeout(idleT);
+  idleT = setTimeout(() => { isIdle = true; }, 1400);
+}, { passive: true });
+
 function toggleNav() {
   document.getElementById('nav-menu').classList.toggle('open');
   document.getElementById('hamburger').classList.toggle('open');
@@ -636,7 +765,6 @@ function closeNav() {
 function openModal()  { document.getElementById('modal-overlay').classList.add('open'); }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
-
 if ('ontouchstart' in window) document.getElementById('spider-cursor').style.display = 'none';
 </script>
 </body>
