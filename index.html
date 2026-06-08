@@ -55,14 +55,10 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
   cursor:none; padding:10px 12px;
   background:none; border:none; outline:none;
 }
-#hamburger span {
-  display:block; width:22px; height:2px;
-  background:var(--text-main); transition:all 0.32s;
-}
+#hamburger span { display:block; width:22px; height:2px; background:var(--text-main); transition:all 0.32s; }
 #hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
 #hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
 #hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
-
 #watch-btn {
   font-family:'You Murdered BB','Cinzel',serif;
   font-size:11px; letter-spacing:4px; text-transform:uppercase;
@@ -70,18 +66,16 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
   cursor:none; padding:8px 0; transition:color 0.3s;
 }
 #watch-btn:hover { color:var(--text-bright); }
-
 #nav-menu {
   position:fixed; top:0; left:0; width:290px; height:100vh;
   background:rgba(4,6,12,0.98); backdrop-filter:blur(24px);
   border-right:1px solid rgba(100,140,180,0.12);
   z-index:100; display:flex; flex-direction:column; justify-content:center;
-  padding:60px 44px;
-  transform:translateX(-100%);
+  padding:60px 44px; transform:translateX(-100%);
   transition:transform 0.42s cubic-bezier(0.16,1,0.3,1);
 }
 #nav-menu.open { transform:translateX(0); }
-#nav-logo { font-family:'You Murdered BB','Cinzel',serif; font-size:28px; color:var(--text-bright); letter-spacing:4px; margin-bottom:40px; opacity:0.9; }
+#nav-logo { font-family:'You Murdered BB','Cinzel',serif; font-size:28px; color:var(--text-bright); letter-spacing:4px; margin-bottom:40px; }
 #nav-menu a {
   display:block; font-family:'You Murdered BB','Cinzel',serif;
   font-size:11px; letter-spacing:4px; text-transform:uppercase;
@@ -90,7 +84,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
   cursor:none; transition:color 0.28s,letter-spacing 0.28s,padding-left 0.28s;
 }
 #nav-menu a:hover { color:var(--text-bright); letter-spacing:6px; padding-left:6px; }
-
 #hero-content {
   position:absolute; left:0; top:50%; transform:translateY(-50%);
   width:40%; padding:0 60px; will-change:transform;
@@ -118,7 +111,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 #btn-explore:hover { background:#eaf2fa; transform:translateX(6px); }
 #btn-details { background:transparent; color:var(--text-main); border:1px solid rgba(100,140,180,0.22); }
 #btn-details:hover { background:rgba(30,58,95,0.42); transform:translateX(6px); }
-
 #modal-overlay {
   position:fixed; inset:0; background:rgba(4,6,12,0.93);
   backdrop-filter:blur(16px); z-index:200;
@@ -153,11 +145,10 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 #modal::-webkit-scrollbar-track { background:transparent; }
 #modal::-webkit-scrollbar-thumb { background:rgba(100,140,180,0.22); }
 
-/* Spider: position:fixed at 0,0 — JS moves it via transform */
-#spider-wrap {
-  position:fixed; top:0; left:0;
+/* Spider canvas positioned fixed, no pointer events */
+#spider-canvas {
+  position:fixed; top:0; left:0; width:100vw; height:100vh;
   pointer-events:none; z-index:9999;
-  will-change:transform;
 }
 
 #vid-status {
@@ -165,11 +156,10 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
   font-family:'Cinzel',serif; font-size:9px; letter-spacing:2px; text-transform:uppercase;
   color:var(--text-dim); padding:4px 10px; background:rgba(6,8,16,0.7); z-index:50; transition:opacity 1.5s;
 }
-
 @media (max-width:768px) {
   #hero-content { width:92%; padding:0 24px; }
   #title-main { font-size:clamp(60px,18vw,100px); }
-  #spider-wrap { display:none; }
+  #spider-canvas { display:none; }
   html,body { cursor:auto; }
   .hero-btn,#hamburger,#watch-btn,#btn-details,#modal-close,#nav-menu a { cursor:pointer; }
   #modal { padding:32px 20px; }
@@ -257,311 +247,337 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
   </div>
 </div>
 
-<!--
-  SPIDER: drawn in a SINGLE coordinate space.
-  The SVG viewBox is large enough for legs to extend.
-  The spider CENTRE is at (100,100) inside the SVG.
-  JS translates the whole #spider-wrap so (100,100) = cursor pos.
--->
-<div id="spider-wrap">
-<svg id="sp" width="200" height="200" viewBox="0 0 200 200"
-     xmlns="http://www.w3.org/2000/svg" overflow="visible" style="display:block">
-<defs>
-  <radialGradient id="cG" cx="35%" cy="28%" r="65%">
-    <stop offset="0%" stop-color="#7B5A30"/>
-    <stop offset="40%" stop-color="#3E2410"/>
-    <stop offset="100%" stop-color="#080300"/>
-  </radialGradient>
-  <radialGradient id="aG" cx="32%" cy="25%" r="68%">
-    <stop offset="0%" stop-color="#5A3C18"/>
-    <stop offset="45%" stop-color="#2A1406"/>
-    <stop offset="100%" stop-color="#060100"/>
-  </radialGradient>
-  <radialGradient id="eG" cx="25%" cy="25%" r="75%">
-    <stop offset="0%" stop-color="#DDFF00"/>
-    <stop offset="50%" stop-color="#88CC00"/>
-    <stop offset="100%" stop-color="#336600"/>
-  </radialGradient>
-  <radialGradient id="eGl" cx="50%" cy="50%" r="50%">
-    <stop offset="0%" stop-color="rgba(150,255,0,0.55)"/>
-    <stop offset="100%" stop-color="rgba(150,255,0,0)"/>
-  </radialGradient>
-  <linearGradient id="lG" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#5A3418"/>
-    <stop offset="55%" stop-color="#221006"/>
-    <stop offset="100%" stop-color="#0A0300"/>
-  </linearGradient>
-  <linearGradient id="fG" x1="0%" y1="0%" x2="0%" y2="100%">
-    <stop offset="0%" stop-color="#2A1808"/>
-    <stop offset="65%" stop-color="#0C0400"/>
-    <stop offset="100%" stop-color="#500000"/>
-  </linearGradient>
-</defs>
-
-<!-- The entire spider is drawn relative to centre (100,100) -->
-<g id="spider-root">
-
-  <!-- Ground shadow -->
-  <ellipse id="sp-shadow" cx="100" cy="130" rx="24" ry="5" fill="rgba(0,0,0,0.30)"/>
-
-  <!-- LEGS — all 8, each group: femur line, tibia line, tarsus line -->
-  <!-- Left legs -->
-  <g id="LL1"><line id="LL1f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LL1t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LL1s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/>
-               <line id="LL1p1" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
-               <line id="LL1p2" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/></g>
-  <g id="LL2"><line id="LL2f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LL2t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LL2s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
-  <g id="LL3"><line id="LL3f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LL3t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LL3s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
-  <g id="LL4"><line id="LL4f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LL4t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LL4s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
-  <!-- Right legs -->
-  <g id="LR1"><line id="LR1f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LR1t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LR1s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/>
-               <line id="LR1p1" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
-               <line id="LR1p2" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/></g>
-  <g id="LR2"><line id="LR2f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LR2t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LR2s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
-  <g id="LR3"><line id="LR3f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LR3t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LR3s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
-  <g id="LR4"><line id="LR4f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
-               <line id="LR4t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
-               <line id="LR4s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
-
-  <!-- BODY on top of legs — all relative to (100,100) -->
-  <!-- Pedicel -->
-  <ellipse cx="100" cy="102" rx="3.5" ry="4.5" fill="#0C0400"/>
-  <!-- Abdomen -->
-  <ellipse cx="100" cy="117" rx="14" ry="19" fill="url(#aG)"/>
-  <ellipse cx="96"  cy="110" rx="5.5" ry="6.5" fill="rgba(90,55,15,0.20)"/>
-  <path d="M100,109 Q105,114 100,120 Q95,114 100,109Z" fill="rgba(40,10,0,0.45)"/>
-  <ellipse cx="100" cy="124" rx="4"   ry="5.5"  fill="rgba(0,0,0,0.42)"/>
-  <ellipse cx="100" cy="117" rx="14"  ry="19"   fill="none" stroke="rgba(0,0,0,0.28)" stroke-width="0.6"/>
-  <!-- Spinnerets -->
-  <ellipse cx="97"  cy="133" rx="3" ry="2" fill="#080200"/>
-  <ellipse cx="103" cy="133" rx="3" ry="2" fill="#080200"/>
-  <!-- Body hairs abdomen -->
-  <g opacity="0.32" stroke="#5A3010" stroke-width="0.9" stroke-linecap="round">
-    <line x1="87"  y1="113" x2="83"  y2="112"/>
-    <line x1="86"  y1="119" x2="82"  y2="119"/>
-    <line x1="87"  y1="125" x2="83"  y2="126"/>
-    <line x1="113" y1="113" x2="117" y2="112"/>
-    <line x1="114" y1="119" x2="118" y2="119"/>
-    <line x1="113" y1="125" x2="117" y2="126"/>
-  </g>
-  <!-- Cephalothorax -->
-  <ellipse cx="100" cy="93"  rx="12" ry="11" fill="url(#cG)"/>
-  <line x1="100" y1="97" x2="100" y2="85" stroke="rgba(0,0,0,0.42)" stroke-width="1.3"/>
-  <ellipse cx="97" cy="88" rx="4.5" ry="3" fill="rgba(120,80,30,0.18)" transform="rotate(-15,97,88)"/>
-  <ellipse cx="100" cy="93" rx="12" ry="11" fill="none" stroke="rgba(0,0,0,0.28)" stroke-width="0.6"/>
-  <!-- Body hairs thorax -->
-  <g opacity="0.32" stroke="#5A3010" stroke-width="0.9" stroke-linecap="round">
-    <line x1="89"  y1="94" x2="85"  y2="96"/>
-    <line x1="89"  y1="98" x2="85"  y2="100"/>
-    <line x1="111" y1="94" x2="115" y2="96"/>
-    <line x1="111" y1="98" x2="115" y2="100"/>
-  </g>
-  <!-- Eye glows -->
-  <circle cx="96"  cy="86" r="5" fill="url(#eGl)" opacity="0.85"/>
-  <circle cx="104" cy="86" r="5" fill="url(#eGl)" opacity="0.85"/>
-  <!-- Main front eyes -->
-  <circle cx="96"  cy="86" r="2.8" fill="url(#eG)"/>
-  <circle cx="104" cy="86" r="2.8" fill="url(#eG)"/>
-  <circle cx="96"  cy="86" r="1.2" fill="#000"/>
-  <circle cx="104" cy="86" r="1.2" fill="#000"/>
-  <circle cx="95.2" cy="85.2" r="0.7" fill="rgba(255,255,200,0.9)"/>
-  <circle cx="103.2" cy="85.2" r="0.7" fill="rgba(255,255,200,0.9)"/>
-  <!-- Secondary eyes -->
-  <circle cx="91"  cy="89" r="2.0" fill="url(#eG)" opacity="0.75"/>
-  <circle cx="109" cy="89" r="2.0" fill="url(#eG)" opacity="0.75"/>
-  <circle cx="91"  cy="89" r="0.85" fill="#000"/>
-  <circle cx="109" cy="89" r="0.85" fill="#000"/>
-  <!-- Tertiary eyes -->
-  <circle cx="98"  cy="83" r="1.5" fill="url(#eG)" opacity="0.55"/>
-  <circle cx="102" cy="83" r="1.5" fill="url(#eG)" opacity="0.55"/>
-  <circle cx="98"  cy="83" r="0.6" fill="#000"/>
-  <circle cx="102" cy="83" r="0.6" fill="#000"/>
-  <!-- Chelicerae -->
-  <path d="M97,82 Q94.5,77 95.5,74"   stroke="url(#fG)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
-  <path d="M103,82 Q105.5,77 104.5,74" stroke="url(#fG)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
-  <circle cx="95.5"  cy="74" r="2.2" fill="#0C0200"/>
-  <circle cx="104.5" cy="74" r="2.2" fill="#0C0200"/>
-  <circle cx="95.5"  cy="72.5" r="1.1" fill="rgba(70,200,0,0.52)"/>
-  <circle cx="104.5" cy="72.5" r="1.1" fill="rgba(70,200,0,0.52)"/>
-  <!-- Pedipalps -->
-  <path d="M94,83  Q90,78 91,75"  stroke="#3A2010" stroke-width="2.0" fill="none" stroke-linecap="round"/>
-  <path d="M106,83 Q110,78 109,75" stroke="#3A2010" stroke-width="2.0" fill="none" stroke-linecap="round"/>
-  <circle cx="91"  cy="75" r="1.9" fill="#200800"/>
-  <circle cx="109" cy="75" r="1.9" fill="#200800"/>
-
-</g><!-- end spider-root -->
-</svg>
-</div>
+<!-- Spider drawn on canvas — full screen, no transform issues -->
+<canvas id="spider-canvas"></canvas>
 
 <script>
 'use strict';
 
-/* ══════════════════════════════════════════
-   VIDEO SCRUB — instant, throttled
-══════════════════════════════════════════ */
+/* ══════════════ VIDEO ══════════════ */
 const video = document.getElementById('bg-video');
 const vidStatus = document.getElementById('vid-status');
 let vidDur = 0;
-let lastSeekVal = -1;
-let lastSeekMs = 0;
-const SEEK_HZ = 1000 / 50; // 50 seeks/sec max
 
 video.addEventListener('loadedmetadata', () => {
   vidDur = video.duration;
-  vidStatus.textContent = '● Video ready — scrub with mouse';
-  setTimeout(() => vidStatus.style.opacity = '0', 3000);
+  vidStatus.textContent = '● Video ready';
+  setTimeout(() => vidStatus.style.opacity = '0', 2500);
 });
-video.addEventListener('error', () => { vidStatus.textContent = '⚠ Video unavailable'; });
+video.addEventListener('error', () => vidStatus.textContent = '⚠ Video unavailable');
 video.load();
 
-/* ══════════════════════════════════════════
-   RAW MOUSE — updated every mousemove
-══════════════════════════════════════════ */
-let rawMx = innerWidth / 2, rawMy = innerHeight / 2;
-let prevRawMx = rawMx, prevRawMy = rawMy;
-let rawSpeed = 0;
+/* ══════════════ MOUSE ══════════════ */
+let mx = innerWidth / 2, my = innerHeight / 2;
+let pmx = mx, pmy = my;
+let rawSpeedX = 0, rawSpeedY = 0;
 
+// Direct video seek on every single mousemove — no throttle needed, browser handles it
 window.addEventListener('mousemove', e => {
-  prevRawMx = rawMx; prevRawMy = rawMy;
-  rawMx = e.clientX; rawMy = e.clientY;
-  const dx = rawMx - prevRawMx, dy = rawMy - prevRawMy;
-  rawSpeed = Math.sqrt(dx * dx + dy * dy);
+  pmx = mx; pmy = my;
+  mx = e.clientX; my = e.clientY;
+  rawSpeedX = mx - pmx;
+  rawSpeedY = my - pmy;
+
+  // INSTANT video seek — right=start, left=end
+  if (vidDur > 0) {
+    video.currentTime = (1 - mx / innerWidth) * vidDur;
+  }
 }, { passive: true });
 
 window.addEventListener('touchmove', e => {
-  rawMx = e.touches[0].clientX;
-  rawMy = e.touches[0].clientY;
+  mx = e.touches[0].clientX; my = e.touches[0].clientY;
+  if (vidDur > 0) video.currentTime = (1 - mx / innerWidth) * vidDur;
 }, { passive: true });
 
-/* ══════════════════════════════════════════
-   SPIDER STATE
-   Body pos (bx,by) = smooth follow of cursor
-   All legs use IK in WORLD space.
-   SVG wrapper translate = bx - 100, by - 100
-   (because spider centre in SVG = 100,100)
-══════════════════════════════════════════ */
-const wrap = document.getElementById('spider-wrap');
-const C = 100; // SVG centre
+/* ══════════════ CANVAS SPIDER ══════════════
+   Drawn entirely on canvas — no SVG transform issues.
+   Spider body centre (bx,by) follows cursor with slight lag.
+   Body ROTATES to face direction of movement.
+   Legs use IK, feet plant in world space.
+═════════════════════════════════════════════ */
+const canvas = document.getElementById('spider-canvas');
+const ctx = canvas.getContext('2d');
 
-let bx = rawMx, by = rawMy;       // body world position
-let bAng = 0, tAng = 0;           // body angle degrees
+function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+// Body state
+let bx = mx, by = my;
+let bodyAngle = -Math.PI / 2; // radians, starts pointing up
+let targetAngle = bodyAngle;
 let smoothSpd = 0;
 let breathT = 0;
 let isIdle = false, idleTimer = null;
 let frontRaise = 0, tFrontRaise = 0;
+let lastMx = mx, lastMy = my;
 
-// Attachment points: local offsets from body centre, BEFORE rotation
-const ATT = {
-  LL1:{lx:-10,ly:-10}, LL2:{lx:-13,ly:-2}, LL3:{lx:-13,ly: 7}, LL4:{lx:-10,ly:14},
-  LR1:{lx: 10,ly:-10}, LR2:{lx: 13,ly:-2}, LR3:{lx: 13,ly: 7}, LR4:{lx: 10,ly:14}
-};
+// Leg config — relative to body centre, in body-local space (body points UP = negative Y)
+// Legs attach from sides, feet rest outward
+const LEG_ATTACH = [
+  { lx: -9, ly: -10 }, // LL1 front
+  { lx: -11, ly: -3 }, // LL2
+  { lx: -11, ly:  5 }, // LL3
+  { lx: -9,  ly: 13 }, // LL4 back
+  { lx:  9, ly: -10 }, // LR1 front
+  { lx:  11, ly: -3 }, // LR2
+  { lx:  11, ly:  5 }, // LR3
+  { lx:  9,  ly: 13 }, // LR4 back
+];
 
-// Rest foot positions: local offsets from body centre, BEFORE rotation
-const REST = {
-  LL1:{rx:-30,ry:-28}, LL2:{rx:-40,ry: -5}, LL3:{rx:-38,ry: 22}, LL4:{rx:-28,ry: 38},
-  LR1:{rx: 30,ry:-28}, LR2:{rx: 40,ry: -5}, LR3:{rx: 38,ry: 22}, LR4:{rx: 28,ry: 38}
-};
+const LEG_REST = [
+  { rx: -30, ry: -28 }, // LL1
+  { rx: -40, ry:  -4 }, // LL2
+  { rx: -38, ry:  20 }, // LL3
+  { rx: -28, ry:  36 }, // LL4
+  { rx:  30, ry: -28 }, // LR1
+  { rx:  40, ry:  -4 }, // LR2
+  { rx:  38, ry:  20 }, // LR3
+  { rx:  28, ry:  36 }, // LR4
+];
 
-// Gait groups (alternating tetrapod)
-const GA = ['LL1','LR2','LL3','LR4'];
-const GB = ['LR1','LL2','LR3','LL4'];
-let gaTurn = true;
-let stepCD = 0;
+const SEG1 = 22, SEG2 = 20, SEG3 = 9;
+const STEP_THRESH = 18;
+const LEG_LIFT = 11;
+// Alternating gait: group A = indices 0,3,5,6 (LL1,LL4,LR2,LR3), group B = 1,2,4,7
+const GA = [0, 3, 5, 6];
+const GB = [1, 2, 4, 7];
+let gaTurn = true, stepCD = 0;
 
-const STEP_THRESH  = 18;   // px deviation before step
-const LEG_LIFT     = 10;   // px lift height
-const SEG1 = 22, SEG2 = 20, SEG3 = 9; // leg segment lengths
+// Per-leg foot state
+const feet = LEG_REST.map((r, i) => ({
+  wx: bx + r.rx, wy: by + r.ry,
+  tx: bx + r.rx, ty: by + r.ry,
+  px: bx + r.rx, py: by + r.ry,
+  stepping: false, t: 0, lift: 0
+}));
 
-// Per-foot state
-const foot = {};
-Object.keys(REST).forEach(id => {
-  foot[id] = { wx:bx+REST[id].rx, wy:by+REST[id].ry,
-               tx:bx+REST[id].rx, ty:by+REST[id].ry,
-               px:bx+REST[id].rx, py:by+REST[id].ry,
-               stepping:false, t:0, lift:0 };
-});
+function rot2(x, y, a) {
+  const c = Math.cos(a), s = Math.sin(a);
+  return { x: x * c - y * s, y: x * s + y * c };
+}
 
-function rot(x,y,a){ const c=Math.cos(a),s=Math.sin(a); return {x:x*c-y*s,y:x*s+y*c}; }
-function dst(ax,ay,bx2,by2){ const dx=ax-bx2,dy=ay-by2; return Math.sqrt(dx*dx+dy*dy); }
+function dist(ax, ay, bx2, by2) {
+  const dx = ax - bx2, dy = ay - by2;
+  return Math.sqrt(dx * dx + dy * dy);
+}
 
-function idealFoot(id) {
-  const r = REST[id];
-  const rad = bAng * Math.PI / 180;
-  const p = rot(r.rx, r.ry, rad);
+function idealFoot(i) {
+  const r = LEG_REST[i];
+  const p = rot2(r.rx, r.ry, bodyAngle);
   // look-ahead
-  const vx = (rawMx - bx) * 0.10;
-  const vy = (rawMy - by) * 0.10;
+  const vx = (mx - bx) * 0.12;
+  const vy = (my - by) * 0.12;
   return { x: bx + p.x + vx, y: by + p.y + vy };
 }
 
-function triggerStep(id) {
-  const ideal = idealFoot(id);
-  foot[id].px = foot[id].wx; foot[id].py = foot[id].wy;
-  foot[id].tx = ideal.x;    foot[id].ty = ideal.y;
-  foot[id].stepping = true; foot[id].t = 0;
+function triggerStep(i) {
+  const ideal = idealFoot(i);
+  feet[i].px = feet[i].wx; feet[i].py = feet[i].wy;
+  feet[i].tx = ideal.x;    feet[i].ty = ideal.y;
+  feet[i].stepping = true;  feet[i].t = 0;
 }
 
-// 2-bone IK — returns knee joint in WORLD coords
+// 2-bone IK: returns knee world position, bends LEFT of travel direction
 function solveIK(ax, ay, fx, fy, l1, l2) {
-  const dx = fx-ax, dy = fy-ay;
-  let d = Math.sqrt(dx*dx + dy*dy);
-  d = Math.min(d, l1+l2-0.1);
-  const cosA = Math.max(-1, Math.min(1, (d*d+l1*l1-l2*l2)/(2*d*l1)));
+  const dx = fx - ax, dy = fy - ay;
+  let d = Math.sqrt(dx * dx + dy * dy);
+  d = Math.min(d, l1 + l2 - 0.1);
+  const cosA = Math.max(-1, Math.min(1, (d * d + l1 * l1 - l2 * l2) / (2 * d * l1)));
   const a1 = Math.acos(cosA);
-  const base = Math.atan2(dy,dx);
-  return { kx: ax + l1*Math.cos(base-a1), ky: ay + l1*Math.sin(base-a1) };
+  const base = Math.atan2(dy, dx);
+  return {
+    kx: ax + l1 * Math.cos(base - a1),
+    ky: ay + l1 * Math.sin(base - a1)
+  };
 }
 
-// Write leg lines. Coords are WORLD; we subtract (bx-C, by-C) to get SVG space.
-function drawLeg(id, axW, ayW, fxW, fyW, lift) {
-  const fyA = fyW - lift;
-  const {kx,ky} = solveIK(axW, ayW, fxW, fyA, SEG1, SEG2);
-  const ta = Math.atan2(fyA-ky, fxW-kx);
-  const txW = fxW + Math.cos(ta)*SEG3;
-  const tyW = fyA + Math.sin(ta)*SEG3;
+// Draw one leg segment chain
+function drawLeg(ax, ay, fx, fy, lift, isLeft) {
+  const fyL = fy - lift;
+  // Bend direction: left legs bend left, right legs bend right
+  const dx = fx - ax, dy = fy - ay;
+  let d = Math.sqrt(dx * dx + dy * dy);
+  d = Math.min(d, SEG1 + SEG2 - 0.1);
+  const cosA = Math.max(-1, Math.min(1, (d * d + SEG1 * SEG1 - SEG2 * SEG2) / (2 * d * SEG1)));
+  const a1 = Math.acos(cosA);
+  const base = Math.atan2(fyL - ay, fx - ax);
+  // Left legs: bend outward (base - a1), right legs: bend outward (base + a1)
+  const kx = ax + SEG1 * Math.cos(isLeft ? base - a1 : base + a1);
+  const ky = ay + SEG1 * Math.sin(isLeft ? base - a1 : base + a1);
 
-  // Convert world → SVG: offset = (bx - C), (by - C)
-  const ox = bx - C, oy = by - C;
-  function setLine(el, x1,y1,x2,y2){
-    el.setAttribute('x1',(x1-ox).toFixed(1)); el.setAttribute('y1',(y1-oy).toFixed(1));
-    el.setAttribute('x2',(x2-ox).toFixed(1)); el.setAttribute('y2',(y2-oy).toFixed(1));
-  }
+  // Tarsus
+  const ta = Math.atan2(fyL - ky, fx - kx);
+  const txE = fx + Math.cos(ta) * SEG3;
+  const tyE = fyL + Math.sin(ta) * SEG3;
 
-  setLine(document.getElementById(id+'f'), axW,ayW, kx,ky);
-  setLine(document.getElementById(id+'t'), kx,ky, fxW,fyA);
-  setLine(document.getElementById(id+'s'), fxW,fyA, txW,tyW);
+  // Femur (thickest)
+  ctx.lineWidth = 3.0;
+  ctx.strokeStyle = '#3A1E08';
+  ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(kx, ky); ctx.stroke();
 
-  // Spines on front legs
-  if (id==='LL1'||id==='LR1') {
-    const p1 = document.getElementById(id+'p1');
-    const p2 = document.getElementById(id+'p2');
-    if (p1&&p2) {
-      const femA = Math.atan2(ky-ayW, kx-axW);
-      const perp = femA + Math.PI/2;
-      const mx1=(axW+kx)/2, my1=(ayW+ky)/2;
-      setLine(p1, mx1,my1, mx1+Math.cos(perp)*5, my1+Math.sin(perp)*5);
-      const mx2=axW+(kx-axW)*0.65, my2=ayW+(ky-ayW)*0.65;
-      setLine(p2, mx2,my2, mx2+Math.cos(perp)*4, my2+Math.sin(perp)*4);
-    }
-  }
+  // Tibia
+  ctx.lineWidth = 2.3;
+  ctx.strokeStyle = '#2A1606';
+  ctx.beginPath(); ctx.moveTo(kx, ky); ctx.lineTo(fx, fyL); ctx.stroke();
+
+  // Tarsus
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = '#180C02';
+  ctx.beginPath(); ctx.moveTo(fx, fyL); ctx.lineTo(txE, tyE); ctx.stroke();
+
+  // Femur joint dot
+  ctx.fillStyle = '#1A0A02';
+  ctx.beginPath(); ctx.arc(kx, ky, 1.8, 0, Math.PI*2); ctx.fill();
 }
 
-/* ══════════════════════════════════════════
-   MAIN LOOP
-══════════════════════════════════════════ */
+function drawSpider() {
+  const spd01 = Math.min(smoothSpd / 20, 1);
+  const sc = isIdle ? 1 + Math.sin(breathT) * 0.012 : 1 + spd01 * 0.03;
+
+  ctx.save();
+  ctx.translate(bx, by);
+  ctx.rotate(bodyAngle + Math.PI / 2); // +PI/2 because body art faces "up" in local space
+  ctx.scale(sc, sc);
+
+  // Shadow
+  ctx.save();
+  ctx.rotate(-(bodyAngle + Math.PI / 2)); // undo rotation for shadow (always flat)
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  ctx.beginPath(); ctx.ellipse(0, 18, 22, 5, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+
+  ctx.restore();
+
+  // Draw all legs FIRST (behind body) — legs in WORLD space, no transform
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  for (let i = 0; i < 8; i++) {
+    const a = LEG_ATTACH[i];
+    const p = rot2(a.lx, a.ly, bodyAngle + Math.PI / 2);
+    const axW = bx + p.x, ayW = by + p.y;
+    let liftExtra = 0;
+    if ((i === 0 || i === 4) && frontRaise > 0) liftExtra = frontRaise * 14;
+    drawLeg(axW, ayW, feet[i].wx, feet[i].wy, feet[i].lift + liftExtra, i < 4);
+  }
+
+  // Draw body on top — rotated with body angle
+  ctx.save();
+  ctx.translate(bx, by);
+  ctx.rotate(bodyAngle + Math.PI / 2);
+  ctx.scale(sc, sc);
+
+  // Pedicel (waist)
+  ctx.fillStyle = '#0C0400';
+  ctx.beginPath(); ctx.ellipse(0, 3, 3.5, 5, 0, 0, Math.PI * 2); ctx.fill();
+
+  // Abdomen
+  const abdGrad = ctx.createRadialGradient(-4, -4, 1, 0, 14, 18);
+  abdGrad.addColorStop(0, '#5A3C18');
+  abdGrad.addColorStop(0.5, '#2A1406');
+  abdGrad.addColorStop(1, '#060100');
+  ctx.fillStyle = abdGrad;
+  ctx.beginPath(); ctx.ellipse(0, 16, 13, 18, 0, 0, Math.PI * 2); ctx.fill();
+  // Abdomen marking
+  ctx.fillStyle = 'rgba(40,10,0,0.5)';
+  ctx.beginPath();
+  ctx.moveTo(0, 9); ctx.quadraticCurveTo(4, 14, 0, 20);
+  ctx.quadraticCurveTo(-4, 14, 0, 9); ctx.fill();
+  ctx.fillStyle = 'rgba(0,0,0,0.38)';
+  ctx.beginPath(); ctx.ellipse(0, 23, 4, 5.5, 0, 0, Math.PI * 2); ctx.fill();
+  // Abdomen highlight
+  ctx.fillStyle = 'rgba(90,55,15,0.18)';
+  ctx.beginPath(); ctx.ellipse(-4, 10, 5, 6, -0.3, 0, Math.PI * 2); ctx.fill();
+  // Spinnerets
+  ctx.fillStyle = '#080200';
+  ctx.beginPath(); ctx.ellipse(-3, 32, 3, 2, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(3, 32, 3, 2, 0, 0, Math.PI * 2); ctx.fill();
+
+  // Cephalothorax
+  const cephGrad = ctx.createRadialGradient(-4, -14, 1, 0, -6, 12);
+  cephGrad.addColorStop(0, '#7B5A30');
+  cephGrad.addColorStop(0.4, '#3E2410');
+  cephGrad.addColorStop(1, '#080300');
+  ctx.fillStyle = cephGrad;
+  ctx.beginPath(); ctx.ellipse(0, -6, 12, 11, 0, 0, Math.PI * 2); ctx.fill();
+  // Fovea groove
+  ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(0, -13); ctx.stroke();
+  // Thorax sheen
+  ctx.fillStyle = 'rgba(120,80,30,0.15)';
+  ctx.beginPath(); ctx.ellipse(-3, -10, 4.5, 3, -0.26, 0, Math.PI * 2); ctx.fill();
+
+  // Body hairs
+  ctx.strokeStyle = 'rgba(80,48,16,0.35)'; ctx.lineWidth = 0.9;
+  [[-10,-5,-14,-7],[-10,-1,-14,-2],[-10,3,-13,4],[10,-5,14,-7],[10,-1,14,-2],[10,3,13,4],
+   [-12,12,-15,11],[-12,18,-15,18],[-11,24,-14,25],[12,12,15,11],[12,18,15,18],[11,24,14,25]
+  ].forEach(([x1,y1,x2,y2]) => {
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  });
+
+  // Eyes — 8 glowing yellow-green
+  // Eye glow halos
+  [[-4,-12],[4,-12]].forEach(([ex,ey]) => {
+    const g = ctx.createRadialGradient(ex, ey, 0, ex, ey, 5.5);
+    g.addColorStop(0, 'rgba(150,255,0,0.55)');
+    g.addColorStop(1, 'rgba(150,255,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(ex, ey, 5.5, 0, Math.PI * 2); ctx.fill();
+  });
+  // Main front pair
+  [[-4,-12],[4,-12]].forEach(([ex,ey]) => {
+    const g2 = ctx.createRadialGradient(ex-0.8, ey-0.8, 0.2, ex, ey, 2.8);
+    g2.addColorStop(0, '#DDFF00'); g2.addColorStop(0.5, '#88CC00'); g2.addColorStop(1, '#336600');
+    ctx.fillStyle = g2;
+    ctx.beginPath(); ctx.arc(ex, ey, 2.8, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(ex, ey, 1.2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,200,0.9)';
+    ctx.beginPath(); ctx.arc(ex-0.8, ey-0.8, 0.7, 0, Math.PI * 2); ctx.fill();
+  });
+  // Secondary eyes
+  [[-9,-9],[9,-9]].forEach(([ex,ey]) => {
+    ctx.fillStyle = '#88CC00'; ctx.globalAlpha = 0.75;
+    ctx.beginPath(); ctx.arc(ex, ey, 2.0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#000'; ctx.globalAlpha = 1;
+    ctx.beginPath(); ctx.arc(ex, ey, 0.85, 0, Math.PI * 2); ctx.fill();
+  });
+  // Tertiary eyes
+  ctx.globalAlpha = 0.6;
+  [[-2,-15],[2,-15]].forEach(([ex,ey]) => {
+    ctx.fillStyle = '#88CC00';
+    ctx.beginPath(); ctx.arc(ex, ey, 1.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(ex, ey, 0.6, 0, Math.PI * 2); ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+
+  // Chelicerae (fangs)
+  ctx.strokeStyle = '#1A0C04'; ctx.lineWidth = 2.8;
+  ctx.beginPath(); ctx.moveTo(-3.5,-16); ctx.quadraticCurveTo(-5.5,-21,-4.5,-24); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(3.5,-16);  ctx.quadraticCurveTo(5.5,-21,4.5,-24);   ctx.stroke();
+  // Fang tips
+  ctx.fillStyle = '#0C0200';
+  ctx.beginPath(); ctx.arc(-4.5,-24,2.2,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(4.5,-24,2.2,0,Math.PI*2); ctx.fill();
+  // Venom drops
+  ctx.fillStyle = 'rgba(70,200,0,0.55)';
+  ctx.beginPath(); ctx.arc(-4.5,-25.8,1.1,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(4.5,-25.8,1.1,0,Math.PI*2); ctx.fill();
+
+  // Pedipalps
+  ctx.strokeStyle = '#3A2010'; ctx.lineWidth = 2.0;
+  ctx.beginPath(); ctx.moveTo(-5.5,-15); ctx.quadraticCurveTo(-9,-20,-7.5,-23); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(5.5,-15);  ctx.quadraticCurveTo(9,-20,7.5,-23);   ctx.stroke();
+  ctx.fillStyle = '#200800';
+  ctx.beginPath(); ctx.arc(-7.5,-23,1.9,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(7.5,-23,1.9,0,Math.PI*2); ctx.fill();
+
+  ctx.restore();
+}
+
+/* ══════════════ MAIN LOOP ══════════════ */
 const fogLayer    = document.getElementById('fog-layer');
 const heroContent = document.getElementById('hero-content');
 let lastT = performance.now();
@@ -571,107 +587,99 @@ function loop(now) {
   const dt = Math.min((now - lastT) / 1000, 0.05);
   lastT = now;
 
-  /* VIDEO SEEK */
-  if (vidDur > 0) {
-    const nowMs = performance.now();
-    const target = (1 - rawMx / innerWidth) * vidDur;
-    if (Math.abs(target - lastSeekVal) > 0.015 && nowMs - lastSeekMs > SEEK_HZ) {
-      video.currentTime = target;
-      lastSeekVal = target;
-      lastSeekMs = nowMs;
-    }
-  }
+  // Clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  /* BODY FOLLOW */
-  smoothSpd += (rawSpeed - smoothSpd) * 0.25;
+  // Speed
+  const dxR = mx - lastMx, dyR = my - lastMy;
+  const instantSpd = Math.sqrt(dxR * dxR + dyR * dyR);
+  lastMx = mx; lastMy = my;
+  smoothSpd += (instantSpd - smoothSpd) * 0.3;
   const spd01 = Math.min(smoothSpd / 20, 1);
-  const lag = isIdle ? 0.07 : Math.min(0.20 + spd01 * 0.15, 0.38);
-  bx += (rawMx - bx) * lag;
-  by += (rawMy - by) * lag;
 
-  /* ANGLE */
-  if (smoothSpd > 1.5) {
-    const a = Math.atan2(rawMy - by, rawMx - bx) * 180/Math.PI + 90;
-    let d = a - bAng;
-    while(d>180)d-=360; while(d<-180)d+=360;
-    tAng = bAng + d;
+  // Body follow — tight lag so it feels connected
+  const lag = isIdle ? 0.08 : Math.min(0.22 + spd01 * 0.18, 0.42);
+  bx += (mx - bx) * lag;
+  by += (my - by) * lag;
+
+  // *** BODY ANGLE — faces direction of travel ***
+  // Compute movement direction from body to cursor
+  const movDx = mx - bx;
+  const movDy = my - by;
+  const movDist = Math.sqrt(movDx * movDx + movDy * movDy);
+
+  if (movDist > 2) {
+    // Target angle: atan2 gives angle of movement vector
+    // We add -PI/2 because our spider body points "up" in local space (head at negative Y)
+    const desiredAngle = Math.atan2(movDy, movDx) - Math.PI / 2;
+    // Smooth angle to target — wrap around
+    let diff = desiredAngle - bodyAngle;
+    while (diff > Math.PI)  diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    // Faster rotation when moving fast
+    const rotSpeed = Math.min(0.12 + spd01 * 0.14, 0.26);
+    bodyAngle += diff * rotSpeed;
   }
-  let ad = tAng - bAng;
-  while(ad>180)ad-=360; while(ad<-180)ad+=360;
-  bAng += ad * Math.min(0.10 + spd01*0.10, 0.22);
 
   breathT += 0.028;
   frontRaise += (tFrontRaise - frontRaise) * 0.10;
 
-  /* GAIT */
-  const stepDur = Math.max(0.09, 0.22 - spd01*0.13);
+  // Gait stepping
+  const stepDur = Math.max(0.09, 0.22 - spd01 * 0.13);
   if (stepCD > 0) stepCD -= dt;
 
   if (stepCD <= 0 && spd01 > 0.05) {
     const grp = gaTurn ? GA : GB;
     let need = false;
-    grp.forEach(id => {
-      if (!foot[id].stepping) {
-        if (dst(foot[id].wx, foot[id].wy, idealFoot(id).x, idealFoot(id).y) > STEP_THRESH)
-          need = true;
+    grp.forEach(i => {
+      if (!feet[i].stepping) {
+        const id2 = idealFoot(i);
+        if (dist(feet[i].wx, feet[i].wy, id2.x, id2.y) > STEP_THRESH) need = true;
       }
     });
     if (need) {
-      grp.forEach(id => { if (!foot[id].stepping) triggerStep(id); });
+      grp.forEach(i => { if (!feet[i].stepping) triggerStep(i); });
       gaTurn = !gaTurn;
       stepCD = stepDur * 0.5;
     }
   }
 
-  /* ADVANCE STEPS */
-  Object.keys(foot).forEach(id => {
-    const f = foot[id];
+  // Advance steps
+  for (let i = 0; i < 8; i++) {
+    const f = feet[i];
     if (f.stepping) {
       f.t += dt / stepDur;
       if (f.t >= 1) {
         f.t = 1; f.stepping = false; f.wx = f.tx; f.wy = f.ty;
       } else {
-        const e = f.t < 0.5 ? 2*f.t*f.t : 1-Math.pow(-2*f.t+2,2)/2;
-        f.wx = f.px + (f.tx-f.px)*e;
-        f.wy = f.py + (f.ty-f.py)*e;
-        f.lift = LEG_LIFT * Math.sin(f.t*Math.PI) * (1 + spd01*0.6);
+        const e = f.t < 0.5 ? 2 * f.t * f.t : 1 - Math.pow(-2 * f.t + 2, 2) / 2;
+        f.wx = f.px + (f.tx - f.px) * e;
+        f.wy = f.py + (f.ty - f.py) * e;
+        f.lift = LEG_LIFT * Math.sin(f.t * Math.PI) * (1 + spd01 * 0.6);
       }
     } else {
-      f.lift *= 0.7;
+      f.lift *= 0.72;
       if (isIdle) {
-        const id2 = idealFoot(id);
+        const id2 = idealFoot(i);
         f.wx += (id2.x - f.wx) * 0.03;
         f.wy += (id2.y - f.wy) * 0.03;
       }
     }
-  });
+  }
 
-  /* RENDER LEGS */
-  const rad = bAng * Math.PI / 180;
-  Object.keys(ATT).forEach(id => {
-    const a = ATT[id];
-    const rp = rot(a.lx, a.ly, rad);
-    const axW = bx + rp.x;
-    const ayW = by + rp.y;
-    let extraLift = 0;
-    if ((id==='LL1'||id==='LR1') && frontRaise > 0) extraLift = frontRaise * 16;
-    drawLeg(id, axW, ayW, foot[id].wx, foot[id].wy, foot[id].lift + extraLift);
-  });
+  // Draw
+  drawSpider();
 
-  /* MOVE WHOLE SVG WRAPPER so (100,100) in SVG = (bx,by) in screen */
-  const sc = isIdle ? 1 + Math.sin(breathT)*0.013 : 1 + spd01*0.038;
-  wrap.style.transform = `translate(${(bx-C).toFixed(1)}px,${(by-C).toFixed(1)}px) scale(${sc.toFixed(3)})`;
-
-  /* PARALLAX */
-  const px = (rawMx/innerWidth  - 0.5) * 14;
-  const py = (rawMy/innerHeight - 0.5) * 9;
+  // Parallax
+  const px = (mx / innerWidth  - 0.5) * 14;
+  const py = (my / innerHeight - 0.5) * 9;
   heroContent.style.transform = `translateY(-50%) translate(${px.toFixed(1)}px,${py.toFixed(1)}px)`;
-  fogLayer.style.transform    = `translate(${(px*1.8).toFixed(1)}px,${(py*1.2).toFixed(1)}px)`;
+  fogLayer.style.transform    = `translate(${(px * 1.8).toFixed(1)}px,${(py * 1.2).toFixed(1)}px)`;
 }
 
 requestAnimationFrame(loop);
 
-/* EVENTS */
+/* ══════════════ UI EVENTS ══════════════ */
 document.querySelectorAll('button,a,.hero-btn').forEach(el => {
   el.addEventListener('mouseenter', () => tFrontRaise = 1);
   el.addEventListener('mouseleave', () => tFrontRaise = 0);
@@ -679,14 +687,14 @@ document.querySelectorAll('button,a,.hero-btn').forEach(el => {
 window.addEventListener('mousemove', () => {
   isIdle = false; clearTimeout(idleTimer);
   idleTimer = setTimeout(() => isIdle = true, 1400);
-}, { passive:true });
+}, { passive: true });
 
-function toggleNav(){document.getElementById('nav-menu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
-function closeNav(){document.getElementById('nav-menu').classList.remove('open');document.getElementById('hamburger').classList.remove('open');}
-function openModal(){document.getElementById('modal-overlay').classList.add('open');}
-function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
-function closeModalOutside(e){if(e.target.id==='modal-overlay')closeModal();}
-if('ontouchstart'in window)document.getElementById('spider-wrap').style.display='none';
+function toggleNav() { document.getElementById('nav-menu').classList.toggle('open'); document.getElementById('hamburger').classList.toggle('open'); }
+function closeNav()  { document.getElementById('nav-menu').classList.remove('open');  document.getElementById('hamburger').classList.remove('open'); }
+function openModal()  { document.getElementById('modal-overlay').classList.add('open'); }
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
+if ('ontouchstart' in window) document.getElementById('spider-canvas').style.display = 'none';
 </script>
 </body>
 </html>
