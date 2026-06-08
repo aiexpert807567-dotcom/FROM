@@ -45,14 +45,11 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 }
 #app { position:fixed; inset:0; z-index:10; }
 
-/* ── TOP BAR ── */
 #topbar {
   position:absolute; top:0; left:0; right:0;
   display:flex; justify-content:space-between; align-items:center;
   padding:30px 44px; z-index:20;
 }
-
-/* NO BORDER, NO BACKGROUND — pure wood texture only */
 #hamburger {
   display:flex; flex-direction:column; gap:5px;
   cursor:none; padding:10px 12px;
@@ -61,7 +58,6 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 #hamburger span {
   display:block; width:22px; height:2px;
   background:var(--text-main); transition:all 0.32s;
-  box-shadow: none;
 }
 #hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
 #hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
@@ -70,14 +66,11 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 #watch-btn {
   font-family:'You Murdered BB','Cinzel',serif;
   font-size:11px; letter-spacing:4px; text-transform:uppercase;
-  color:var(--text-main);
-  background:none; border:none; outline:none;
-  cursor:none; padding:8px 0;
-  transition:color 0.3s;
+  color:var(--text-main); background:none; border:none; outline:none;
+  cursor:none; padding:8px 0; transition:color 0.3s;
 }
 #watch-btn:hover { color:var(--text-bright); }
 
-/* ── NAV ── */
 #nav-menu {
   position:fixed; top:0; left:0; width:290px; height:100vh;
   background:rgba(4,6,12,0.98); backdrop-filter:blur(24px);
@@ -88,10 +81,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
   transition:transform 0.42s cubic-bezier(0.16,1,0.3,1);
 }
 #nav-menu.open { transform:translateX(0); }
-#nav-logo {
-  font-family:'You Murdered BB','Cinzel',serif;
-  font-size:28px; color:var(--text-bright); letter-spacing:4px; margin-bottom:40px; opacity:0.9;
-}
+#nav-logo { font-family:'You Murdered BB','Cinzel',serif; font-size:28px; color:var(--text-bright); letter-spacing:4px; margin-bottom:40px; opacity:0.9; }
 #nav-menu a {
   display:block; font-family:'You Murdered BB','Cinzel',serif;
   font-size:11px; letter-spacing:4px; text-transform:uppercase;
@@ -101,53 +91,34 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 }
 #nav-menu a:hover { color:var(--text-bright); letter-spacing:6px; padding-left:6px; }
 
-/* ── HERO ── */
 #hero-content {
   position:absolute; left:0; top:50%; transform:translateY(-50%);
   width:40%; padding:0 60px; will-change:transform;
 }
-
 #title-main {
   font-family:'You Murdered BB','Cinzel',serif;
-  font-size:clamp(80px,11vw,148px);
-  line-height:0.86;
-  color:var(--text-bright);
-  letter-spacing:6px;
-  /* NO text-shadow highlight — just depth shadow */
+  font-size:clamp(80px,11vw,148px); line-height:0.86;
+  color:var(--text-bright); letter-spacing:6px;
   text-shadow:0 6px 50px rgba(0,0,0,0.9);
   will-change:transform; margin-bottom:18px;
-  -webkit-text-fill-color:var(--text-bright);
-  background:none;
 }
-
 #tagline {
   font-family:'Crimson Pro',serif; font-style:italic;
   font-size:clamp(14px,1.2vw,17px);
   color:var(--text-dim); letter-spacing:1px;
   margin-bottom:42px; max-width:280px; line-height:1.6;
 }
-
 #btn-group { display:flex; flex-direction:column; gap:13px; width:fit-content; }
-
 .hero-btn {
   font-family:'You Murdered BB','Cinzel',serif;
   font-size:11px; letter-spacing:4px; text-transform:uppercase;
-  padding:14px 36px; cursor:none;
-  border:none; outline:none; background:none;
-  transition:all 0.3s;
+  padding:14px 36px; cursor:none; border:none; outline:none; transition:all 0.3s;
 }
-#btn-explore {
-  background:rgba(200,216,232,0.96);
-  color:#060810;
-}
-#btn-explore:hover { background:#eaf2fa; transform:translateX(6px); letter-spacing:5px; }
-#btn-details {
-  background:transparent; color:var(--text-main);
-  border:1px solid rgba(100,140,180,0.22);
-}
-#btn-details:hover { background:rgba(30,58,95,0.42); transform:translateX(6px); letter-spacing:5px; }
+#btn-explore { background:rgba(200,216,232,0.96); color:#060810; }
+#btn-explore:hover { background:#eaf2fa; transform:translateX(6px); }
+#btn-details { background:transparent; color:var(--text-main); border:1px solid rgba(100,140,180,0.22); }
+#btn-details:hover { background:rgba(30,58,95,0.42); transform:translateX(6px); }
 
-/* ── MODAL ── */
 #modal-overlay {
   position:fixed; inset:0; background:rgba(4,6,12,0.93);
   backdrop-filter:blur(16px); z-index:200;
@@ -161,8 +132,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 }
 #modal-close {
   position:absolute; top:22px; right:26px;
-  font-family:'You Murdered BB','Cinzel',serif;
-  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  font-family:'You Murdered BB','Cinzel',serif; font-size:10px; letter-spacing:3px; text-transform:uppercase;
   color:var(--text-dim); cursor:none; background:none; border:none; transition:color 0.3s; outline:none;
 }
 #modal-close:hover { color:var(--text-bright); }
@@ -183,20 +153,23 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 #modal::-webkit-scrollbar-track { background:transparent; }
 #modal::-webkit-scrollbar-thumb { background:rgba(100,140,180,0.22); }
 
-/* ── SPIDER ── */
-#spider-cursor { position:fixed; pointer-events:none; z-index:9999; top:0; left:0; will-change:transform; }
+/* Spider: position:fixed at 0,0 — JS moves it via transform */
+#spider-wrap {
+  position:fixed; top:0; left:0;
+  pointer-events:none; z-index:9999;
+  will-change:transform;
+}
 
 #vid-status {
-  position:fixed; bottom:20px; right:20px;
+  position:fixed; bottom:18px; right:18px;
   font-family:'Cinzel',serif; font-size:9px; letter-spacing:2px; text-transform:uppercase;
-  color:var(--text-dim); padding:5px 12px;
-  background:rgba(6,8,16,0.7); z-index:50; transition:opacity 1.5s;
+  color:var(--text-dim); padding:4px 10px; background:rgba(6,8,16,0.7); z-index:50; transition:opacity 1.5s;
 }
 
 @media (max-width:768px) {
   #hero-content { width:92%; padding:0 24px; }
   #title-main { font-size:clamp(60px,18vw,100px); }
-  #spider-cursor { display:none; }
+  #spider-wrap { display:none; }
   html,body { cursor:auto; }
   .hero-btn,#hamburger,#watch-btn,#btn-details,#modal-close,#nav-menu a { cursor:pointer; }
   #modal { padding:32px 20px; }
@@ -214,9 +187,7 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
 
 <div id="app">
   <div id="topbar">
-    <button id="hamburger" onclick="toggleNav()">
-      <span></span><span></span><span></span>
-    </button>
+    <button id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></button>
     <button id="watch-btn">Watch Trailer</button>
   </div>
   <nav id="nav-menu">
@@ -286,486 +257,436 @@ html, body { width:100%; height:100%; overflow:hidden; background:var(--bg-deep)
   </div>
 </div>
 
-<!-- REALISTIC SPIDER — larger, IK-driven legs -->
-<div id="spider-cursor">
-<svg id="spsvg" width="120" height="120" viewBox="-60 -60 120 120" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+<!--
+  SPIDER: drawn in a SINGLE coordinate space.
+  The SVG viewBox is large enough for legs to extend.
+  The spider CENTRE is at (100,100) inside the SVG.
+  JS translates the whole #spider-wrap so (100,100) = cursor pos.
+-->
+<div id="spider-wrap">
+<svg id="sp" width="200" height="200" viewBox="0 0 200 200"
+     xmlns="http://www.w3.org/2000/svg" overflow="visible" style="display:block">
 <defs>
   <radialGradient id="cG" cx="35%" cy="28%" r="65%">
     <stop offset="0%" stop-color="#7B5A30"/>
     <stop offset="40%" stop-color="#3E2410"/>
-    <stop offset="100%" stop-color="#0A0400"/>
+    <stop offset="100%" stop-color="#080300"/>
   </radialGradient>
   <radialGradient id="aG" cx="32%" cy="25%" r="68%">
-    <stop offset="0%" stop-color="#6A4820"/>
-    <stop offset="45%" stop-color="#2E1608"/>
-    <stop offset="100%" stop-color="#080200"/>
+    <stop offset="0%" stop-color="#5A3C18"/>
+    <stop offset="45%" stop-color="#2A1406"/>
+    <stop offset="100%" stop-color="#060100"/>
   </radialGradient>
   <radialGradient id="eG" cx="25%" cy="25%" r="75%">
-    <stop offset="0%" stop-color="#E0FF00"/>
+    <stop offset="0%" stop-color="#DDFF00"/>
     <stop offset="50%" stop-color="#88CC00"/>
     <stop offset="100%" stop-color="#336600"/>
   </radialGradient>
-  <radialGradient id="eGlow" cx="50%" cy="50%" r="50%">
-    <stop offset="0%" stop-color="rgba(160,255,0,0.5)"/>
-    <stop offset="100%" stop-color="rgba(160,255,0,0)"/>
+  <radialGradient id="eGl" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="rgba(150,255,0,0.55)"/>
+    <stop offset="100%" stop-color="rgba(150,255,0,0)"/>
   </radialGradient>
   <linearGradient id="lG" x1="0%" y1="0%" x2="100%" y2="100%">
-    <stop offset="0%" stop-color="#4A2810"/>
-    <stop offset="50%" stop-color="#1E0C04"/>
-    <stop offset="100%" stop-color="#0A0400"/>
+    <stop offset="0%" stop-color="#5A3418"/>
+    <stop offset="55%" stop-color="#221006"/>
+    <stop offset="100%" stop-color="#0A0300"/>
   </linearGradient>
   <linearGradient id="fG" x1="0%" y1="0%" x2="0%" y2="100%">
     <stop offset="0%" stop-color="#2A1808"/>
-    <stop offset="70%" stop-color="#0C0400"/>
-    <stop offset="100%" stop-color="#5A0000"/>
+    <stop offset="65%" stop-color="#0C0400"/>
+    <stop offset="100%" stop-color="#500000"/>
   </linearGradient>
 </defs>
 
-<!-- Shadow -->
-<ellipse cx="2" cy="30" rx="22" ry="5" fill="rgba(0,0,0,0.32)"/>
+<!-- The entire spider is drawn relative to centre (100,100) -->
+<g id="spider-root">
 
-<!-- 8 LEGS — each has 3 SVG lines (femur / tibia / tarsus) controlled by JS IK -->
-<!-- LEFT legs -->
-<g id="LL1">
-  <line id="LL1_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LL1_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LL1_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-  <!-- spines -->
-  <line id="LL1_sp1" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
-  <line id="LL1_sp2" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
-</g>
-<g id="LL2">
-  <line id="LL2_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LL2_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LL2_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-</g>
-<g id="LL3">
-  <line id="LL3_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LL3_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LL3_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-</g>
-<g id="LL4">
-  <line id="LL4_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LL4_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LL4_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-</g>
-<!-- RIGHT legs -->
-<g id="LR1">
-  <line id="LR1_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LR1_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LR1_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-  <line id="LR1_sp1" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
-  <line id="LR1_sp2" stroke="#2A1808" stroke-width="1.0" stroke-linecap="round" opacity="0.6"/>
-</g>
-<g id="LR2">
-  <line id="LR2_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LR2_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LR2_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-</g>
-<g id="LR3">
-  <line id="LR3_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LR3_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LR3_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-</g>
-<g id="LR4">
-  <line id="LR4_f" stroke="url(#lG)" stroke-width="3.0" stroke-linecap="round"/>
-  <line id="LR4_t" stroke="url(#lG)" stroke-width="2.4" stroke-linecap="round"/>
-  <line id="LR4_s" stroke="#0A0400"  stroke-width="1.6" stroke-linecap="round"/>
-</g>
+  <!-- Ground shadow -->
+  <ellipse id="sp-shadow" cx="100" cy="130" rx="24" ry="5" fill="rgba(0,0,0,0.30)"/>
 
-<!-- BODY drawn on top of legs -->
-<!-- Pedicel -->
-<ellipse cx="0" cy="2" rx="3" ry="4" fill="#0C0400"/>
-<!-- Abdomen -->
-<ellipse cx="0" cy="16" rx="13" ry="18" fill="url(#aG)"/>
-<ellipse cx="-4" cy="9"  rx="5" ry="6"  fill="rgba(100,65,20,0.20)"/>
-<path d="M 0,9 Q 4,13 0,18 Q -4,13 0,9Z" fill="rgba(50,15,0,0.45)"/>
-<ellipse cx="0" cy="22" rx="3.5" ry="5" fill="rgba(0,0,0,0.4)"/>
-<ellipse cx="0" cy="16" rx="13" ry="18" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
-<!-- Spinnerets -->
-<ellipse cx="-2.5" cy="32" rx="2.5" ry="1.8" fill="#080200"/>
-<ellipse cx="2.5"  cy="32" rx="2.5" ry="1.8" fill="#080200"/>
-<!-- Cephalothorax -->
-<ellipse cx="0" cy="-6" rx="11" ry="10" fill="url(#cG)"/>
-<line x1="0" y1="-2" x2="0" y2="-12" stroke="rgba(0,0,0,0.45)" stroke-width="1.2"/>
-<ellipse cx="-3" cy="-10" rx="4" ry="3" fill="rgba(130,85,35,0.18)" transform="rotate(-15,-3,-10)"/>
-<ellipse cx="0" cy="-6" rx="11" ry="10" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="0.5"/>
-<!-- Body hairs -->
-<g opacity="0.35" stroke="#5A3010" stroke-width="0.8" stroke-linecap="round">
-  <line x1="-10" y1="-6"  x2="-14" y2="-8"/>
-  <line x1="-10" y1="-2"  x2="-14" y2="-3"/>
-  <line x1="-10" y1="2"   x2="-13" y2="3"/>
-  <line x1="10"  y1="-6"  x2="14"  y2="-8"/>
-  <line x1="10"  y1="-2"  x2="14"  y2="-3"/>
-  <line x1="10"  y1="2"   x2="13"  y2="3"/>
-  <line x1="-12" y1="12"  x2="-15" y2="11"/>
-  <line x1="-12" y1="17"  x2="-15" y2="17"/>
-  <line x1="-11" y1="22"  x2="-14" y2="23"/>
-  <line x1="12"  y1="12"  x2="15"  y2="11"/>
-  <line x1="12"  y1="17"  x2="15"  y2="17"/>
-  <line x1="11"  y1="22"  x2="14"  y2="23"/>
-</g>
-<!-- EYES — 8, glowing yellow-green -->
-<circle cx="-4"   cy="-12" r="4.5" fill="url(#eGlow)" opacity="0.9"/>
-<circle cx="4"    cy="-12" r="4.5" fill="url(#eGlow)" opacity="0.9"/>
-<circle cx="-4"   cy="-12" r="2.6" fill="url(#eG)"/>
-<circle cx="4"    cy="-12" r="2.6" fill="url(#eG)"/>
-<circle cx="-4"   cy="-12" r="1.2" fill="#000"/>
-<circle cx="4"    cy="-12" r="1.2" fill="#000"/>
-<circle cx="-4.6" cy="-12.6" r="0.65" fill="rgba(255,255,200,0.95)"/>
-<circle cx="3.4"  cy="-12.6" r="0.65" fill="rgba(255,255,200,0.95)"/>
-<circle cx="-8"   cy="-9"  r="1.9" fill="url(#eG)" opacity="0.8"/>
-<circle cx="8"    cy="-9"  r="1.9" fill="url(#eG)" opacity="0.8"/>
-<circle cx="-8"   cy="-9"  r="0.8" fill="#000"/>
-<circle cx="8"    cy="-9"  r="0.8" fill="#000"/>
-<circle cx="-2"   cy="-15" r="1.4" fill="url(#eG)" opacity="0.6"/>
-<circle cx="2"    cy="-15" r="1.4" fill="url(#eG)" opacity="0.6"/>
-<circle cx="-2"   cy="-15" r="0.6" fill="#000"/>
-<circle cx="2"    cy="-15" r="0.6" fill="#000"/>
-<!-- Chelicerae -->
-<path d="M -3.5,-16 Q -5.5,-21 -4,-24" stroke="url(#fG)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-<path d="M 3.5,-16  Q 5.5,-21  4,-24"  stroke="url(#fG)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-<circle cx="-4" cy="-24" r="2.0" fill="#0C0200"/>
-<circle cx="4"  cy="-24" r="2.0" fill="#0C0200"/>
-<circle cx="-4" cy="-25.5" r="1.0" fill="rgba(80,200,0,0.55)"/>
-<circle cx="4"  cy="-25.5" r="1.0" fill="rgba(80,200,0,0.55)"/>
-<!-- Pedipalps -->
-<path d="M -6,-15 Q -10,-20 -8.5,-23" stroke="#3A2010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-<path d="M 6,-15  Q 10,-20  8.5,-23"  stroke="#3A2010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-<circle cx="-8.5" cy="-23" r="1.7" fill="#200800"/>
-<circle cx="8.5"  cy="-23" r="1.7" fill="#200800"/>
+  <!-- LEGS — all 8, each group: femur line, tibia line, tarsus line -->
+  <!-- Left legs -->
+  <g id="LL1"><line id="LL1f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LL1t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LL1s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/>
+               <line id="LL1p1" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+               <line id="LL1p2" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/></g>
+  <g id="LL2"><line id="LL2f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LL2t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LL2s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
+  <g id="LL3"><line id="LL3f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LL3t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LL3s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
+  <g id="LL4"><line id="LL4f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LL4t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LL4s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
+  <!-- Right legs -->
+  <g id="LR1"><line id="LR1f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LR1t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LR1s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/>
+               <line id="LR1p1" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/>
+               <line id="LR1p2" stroke="#301808" stroke-width="1.1" stroke-linecap="round" opacity="0.55"/></g>
+  <g id="LR2"><line id="LR2f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LR2t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LR2s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
+  <g id="LR3"><line id="LR3f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LR3t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LR3s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
+  <g id="LR4"><line id="LR4f" stroke="url(#lG)" stroke-width="3.2" stroke-linecap="round"/>
+               <line id="LR4t" stroke="url(#lG)" stroke-width="2.5" stroke-linecap="round"/>
+               <line id="LR4s" stroke="#0A0300" stroke-width="1.7" stroke-linecap="round"/></g>
+
+  <!-- BODY on top of legs — all relative to (100,100) -->
+  <!-- Pedicel -->
+  <ellipse cx="100" cy="102" rx="3.5" ry="4.5" fill="#0C0400"/>
+  <!-- Abdomen -->
+  <ellipse cx="100" cy="117" rx="14" ry="19" fill="url(#aG)"/>
+  <ellipse cx="96"  cy="110" rx="5.5" ry="6.5" fill="rgba(90,55,15,0.20)"/>
+  <path d="M100,109 Q105,114 100,120 Q95,114 100,109Z" fill="rgba(40,10,0,0.45)"/>
+  <ellipse cx="100" cy="124" rx="4"   ry="5.5"  fill="rgba(0,0,0,0.42)"/>
+  <ellipse cx="100" cy="117" rx="14"  ry="19"   fill="none" stroke="rgba(0,0,0,0.28)" stroke-width="0.6"/>
+  <!-- Spinnerets -->
+  <ellipse cx="97"  cy="133" rx="3" ry="2" fill="#080200"/>
+  <ellipse cx="103" cy="133" rx="3" ry="2" fill="#080200"/>
+  <!-- Body hairs abdomen -->
+  <g opacity="0.32" stroke="#5A3010" stroke-width="0.9" stroke-linecap="round">
+    <line x1="87"  y1="113" x2="83"  y2="112"/>
+    <line x1="86"  y1="119" x2="82"  y2="119"/>
+    <line x1="87"  y1="125" x2="83"  y2="126"/>
+    <line x1="113" y1="113" x2="117" y2="112"/>
+    <line x1="114" y1="119" x2="118" y2="119"/>
+    <line x1="113" y1="125" x2="117" y2="126"/>
+  </g>
+  <!-- Cephalothorax -->
+  <ellipse cx="100" cy="93"  rx="12" ry="11" fill="url(#cG)"/>
+  <line x1="100" y1="97" x2="100" y2="85" stroke="rgba(0,0,0,0.42)" stroke-width="1.3"/>
+  <ellipse cx="97" cy="88" rx="4.5" ry="3" fill="rgba(120,80,30,0.18)" transform="rotate(-15,97,88)"/>
+  <ellipse cx="100" cy="93" rx="12" ry="11" fill="none" stroke="rgba(0,0,0,0.28)" stroke-width="0.6"/>
+  <!-- Body hairs thorax -->
+  <g opacity="0.32" stroke="#5A3010" stroke-width="0.9" stroke-linecap="round">
+    <line x1="89"  y1="94" x2="85"  y2="96"/>
+    <line x1="89"  y1="98" x2="85"  y2="100"/>
+    <line x1="111" y1="94" x2="115" y2="96"/>
+    <line x1="111" y1="98" x2="115" y2="100"/>
+  </g>
+  <!-- Eye glows -->
+  <circle cx="96"  cy="86" r="5" fill="url(#eGl)" opacity="0.85"/>
+  <circle cx="104" cy="86" r="5" fill="url(#eGl)" opacity="0.85"/>
+  <!-- Main front eyes -->
+  <circle cx="96"  cy="86" r="2.8" fill="url(#eG)"/>
+  <circle cx="104" cy="86" r="2.8" fill="url(#eG)"/>
+  <circle cx="96"  cy="86" r="1.2" fill="#000"/>
+  <circle cx="104" cy="86" r="1.2" fill="#000"/>
+  <circle cx="95.2" cy="85.2" r="0.7" fill="rgba(255,255,200,0.9)"/>
+  <circle cx="103.2" cy="85.2" r="0.7" fill="rgba(255,255,200,0.9)"/>
+  <!-- Secondary eyes -->
+  <circle cx="91"  cy="89" r="2.0" fill="url(#eG)" opacity="0.75"/>
+  <circle cx="109" cy="89" r="2.0" fill="url(#eG)" opacity="0.75"/>
+  <circle cx="91"  cy="89" r="0.85" fill="#000"/>
+  <circle cx="109" cy="89" r="0.85" fill="#000"/>
+  <!-- Tertiary eyes -->
+  <circle cx="98"  cy="83" r="1.5" fill="url(#eG)" opacity="0.55"/>
+  <circle cx="102" cy="83" r="1.5" fill="url(#eG)" opacity="0.55"/>
+  <circle cx="98"  cy="83" r="0.6" fill="#000"/>
+  <circle cx="102" cy="83" r="0.6" fill="#000"/>
+  <!-- Chelicerae -->
+  <path d="M97,82 Q94.5,77 95.5,74"   stroke="url(#fG)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+  <path d="M103,82 Q105.5,77 104.5,74" stroke="url(#fG)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+  <circle cx="95.5"  cy="74" r="2.2" fill="#0C0200"/>
+  <circle cx="104.5" cy="74" r="2.2" fill="#0C0200"/>
+  <circle cx="95.5"  cy="72.5" r="1.1" fill="rgba(70,200,0,0.52)"/>
+  <circle cx="104.5" cy="72.5" r="1.1" fill="rgba(70,200,0,0.52)"/>
+  <!-- Pedipalps -->
+  <path d="M94,83  Q90,78 91,75"  stroke="#3A2010" stroke-width="2.0" fill="none" stroke-linecap="round"/>
+  <path d="M106,83 Q110,78 109,75" stroke="#3A2010" stroke-width="2.0" fill="none" stroke-linecap="round"/>
+  <circle cx="91"  cy="75" r="1.9" fill="#200800"/>
+  <circle cx="109" cy="75" r="1.9" fill="#200800"/>
+
+</g><!-- end spider-root -->
 </svg>
 </div>
 
 <script>
 'use strict';
 
-/* ═══════════════════════════════════════════════
-   VIDEO — INSTANT SEEK
-   Use a shadow time tracker to avoid seek-on-every-frame.
-   Cap seeks to ~30/sec so browser doesn't choke.
-═══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════
+   VIDEO SCRUB — instant, throttled
+══════════════════════════════════════════ */
 const video = document.getElementById('bg-video');
 const vidStatus = document.getElementById('vid-status');
-
-let videoDuration = 0;
-let lastSeeked = -1;
-let lastSeekTime = 0;
-const SEEK_INTERVAL = 1000 / 40; // max 40 seeks/sec
+let vidDur = 0;
+let lastSeekVal = -1;
+let lastSeekMs = 0;
+const SEEK_HZ = 1000 / 50; // 50 seeks/sec max
 
 video.addEventListener('loadedmetadata', () => {
-  videoDuration = video.duration;
-  vidStatus.textContent = '● Loaded — move mouse to scrub';
-  setTimeout(() => { vidStatus.style.opacity = '0'; }, 3000);
+  vidDur = video.duration;
+  vidStatus.textContent = '● Video ready — scrub with mouse';
+  setTimeout(() => vidStatus.style.opacity = '0', 3000);
 });
 video.addEventListener('error', () => { vidStatus.textContent = '⚠ Video unavailable'; });
 video.load();
 
-/* ═══════════════════════════════════════════════
-   MOUSE
-═══════════════════════════════════════════════ */
-let mx = innerWidth / 2, my = innerHeight / 2;
-let pmx = mx, pmy = my;
+/* ══════════════════════════════════════════
+   RAW MOUSE — updated every mousemove
+══════════════════════════════════════════ */
+let rawMx = innerWidth / 2, rawMy = innerHeight / 2;
+let prevRawMx = rawMx, prevRawMy = rawMy;
 let rawSpeed = 0;
 
-document.addEventListener('mousemove', e => {
-  pmx = mx; pmy = my;
-  mx = e.clientX; my = e.clientY;
-  const dx = mx - pmx, dy = my - pmy;
+window.addEventListener('mousemove', e => {
+  prevRawMx = rawMx; prevRawMy = rawMy;
+  rawMx = e.clientX; rawMy = e.clientY;
+  const dx = rawMx - prevRawMx, dy = rawMy - prevRawMy;
   rawSpeed = Math.sqrt(dx * dx + dy * dy);
 }, { passive: true });
 
-document.addEventListener('touchmove', e => {
-  mx = e.touches[0].clientX;
-  my = e.touches[0].clientY;
+window.addEventListener('touchmove', e => {
+  rawMx = e.touches[0].clientX;
+  rawMy = e.touches[0].clientY;
 }, { passive: true });
 
-/* ═══════════════════════════════════════════════
-   SPIDER — IK SYSTEM
-═══════════════════════════════════════════════ */
-const spiderEl = document.getElementById('spider-cursor');
-const SVG_CX = 60, SVG_CY = 60; // viewBox centre offset
+/* ══════════════════════════════════════════
+   SPIDER STATE
+   Body pos (bx,by) = smooth follow of cursor
+   All legs use IK in WORLD space.
+   SVG wrapper translate = bx - 100, by - 100
+   (because spider centre in SVG = 100,100)
+══════════════════════════════════════════ */
+const wrap = document.getElementById('spider-wrap');
+const C = 100; // SVG centre
 
-// Spider body world pos (smooth)
-let bx = mx, by = my;
-let bAngle = 0, tAngle = 0;
-let idleBreath = 0;
-let isIdle = false, idleT = null;
+let bx = rawMx, by = rawMy;       // body world position
+let bAng = 0, tAng = 0;           // body angle degrees
+let smoothSpd = 0;
+let breathT = 0;
+let isIdle = false, idleTimer = null;
 let frontRaise = 0, tFrontRaise = 0;
-let smoothSpeed = 0;
 
-// Leg attachment points relative to body centre (SVG local coords)
-// (before rotation)
-const ATTACH = {
-  LL1: { lx: -9,  ly: -9  },
-  LL2: { lx: -11, ly: -2  },
-  LL3: { lx: -11, ly:  5  },
-  LL4: { lx: -9,  ly:  12 },
-  LR1: { lx:  9,  ly: -9  },
-  LR2: { lx:  11, ly: -2  },
-  LR3: { lx:  11, ly:  5  },
-  LR4: { lx:  9,  ly:  12 }
+// Attachment points: local offsets from body centre, BEFORE rotation
+const ATT = {
+  LL1:{lx:-10,ly:-10}, LL2:{lx:-13,ly:-2}, LL3:{lx:-13,ly: 7}, LL4:{lx:-10,ly:14},
+  LR1:{lx: 10,ly:-10}, LR2:{lx: 13,ly:-2}, LR3:{lx: 13,ly: 7}, LR4:{lx: 10,ly:14}
 };
 
-// Leg segment lengths
-const L1 = 20, L2 = 19, L3 = 8;
-
-// Rest foot positions relative to body (before rotation)
+// Rest foot positions: local offsets from body centre, BEFORE rotation
 const REST = {
-  LL1: { rx: -28, ry: -26 },
-  LL2: { rx: -36, ry:  -4 },
-  LL3: { rx: -34, ry:  20 },
-  LL4: { rx: -26, ry:  36 },
-  LR1: { rx:  28, ry: -26 },
-  LR2: { rx:  36, ry:  -4 },
-  LR3: { rx:  34, ry:  20 },
-  LR4: { rx:  26, ry:  36 }
+  LL1:{rx:-30,ry:-28}, LL2:{rx:-40,ry: -5}, LL3:{rx:-38,ry: 22}, LL4:{rx:-28,ry: 38},
+  LR1:{rx: 30,ry:-28}, LR2:{rx: 40,ry: -5}, LR3:{rx: 38,ry: 22}, LR4:{rx: 28,ry: 38}
 };
 
-// Alternating tetrapod gait
-const GRP_A = ['LL1', 'LR2', 'LL3', 'LR4'];
-const GRP_B = ['LR1', 'LL2', 'LR3', 'LL4'];
-let grpATurn = true;
-let stepCooldown = 0;
+// Gait groups (alternating tetrapod)
+const GA = ['LL1','LR2','LL3','LR4'];
+const GB = ['LR1','LL2','LR3','LL4'];
+let gaTurn = true;
+let stepCD = 0;
 
-const STEP_TRIGGER = 16; // px from ideal before step triggers
-const STEP_DUR_BASE = 0.14; // seconds (fast)
-const LEG_LIFT_H = 8;
+const STEP_THRESH  = 18;   // px deviation before step
+const LEG_LIFT     = 10;   // px lift height
+const SEG1 = 22, SEG2 = 20, SEG3 = 9; // leg segment lengths
 
-// Foot state
+// Per-foot state
 const foot = {};
 Object.keys(REST).forEach(id => {
-  const r = REST[id];
-  foot[id] = {
-    wx: bx + r.rx, wy: by + r.ry,
-    tx: bx + r.rx, ty: by + r.ry,
-    px: bx + r.rx, py: by + r.ry,
-    stepping: false, t: 0, lift: 0
-  };
+  foot[id] = { wx:bx+REST[id].rx, wy:by+REST[id].ry,
+               tx:bx+REST[id].rx, ty:by+REST[id].ry,
+               px:bx+REST[id].rx, py:by+REST[id].ry,
+               stepping:false, t:0, lift:0 };
 });
 
-function rotPt(x, y, a) {
-  const c = Math.cos(a), s = Math.sin(a);
-  return { x: x * c - y * s, y: x * s + y * c };
-}
+function rot(x,y,a){ const c=Math.cos(a),s=Math.sin(a); return {x:x*c-y*s,y:x*s+y*c}; }
+function dst(ax,ay,bx2,by2){ const dx=ax-bx2,dy=ay-by2; return Math.sqrt(dx*dx+dy*dy); }
 
 function idealFoot(id) {
   const r = REST[id];
-  const rad = bAngle * Math.PI / 180;
-  // look-ahead: place foot slightly ahead of travel
-  const vx = (mx - bx) * 0.08;
-  const vy = (my - by) * 0.08;
-  const rp = rotPt(r.rx, r.ry, rad);
-  return { x: bx + rp.x + vx, y: by + rp.y + vy };
-}
-
-function dist2(ax, ay, bx2, by2) {
-  const dx = ax - bx2, dy = ay - by2;
-  return Math.sqrt(dx * dx + dy * dy);
+  const rad = bAng * Math.PI / 180;
+  const p = rot(r.rx, r.ry, rad);
+  // look-ahead
+  const vx = (rawMx - bx) * 0.10;
+  const vy = (rawMy - by) * 0.10;
+  return { x: bx + p.x + vx, y: by + p.y + vy };
 }
 
 function triggerStep(id) {
   const ideal = idealFoot(id);
-  foot[id].px = foot[id].wx;
-  foot[id].py = foot[id].wy;
-  foot[id].tx = ideal.x;
-  foot[id].ty = ideal.y;
-  foot[id].stepping = true;
-  foot[id].t = 0;
+  foot[id].px = foot[id].wx; foot[id].py = foot[id].wy;
+  foot[id].tx = ideal.x;    foot[id].ty = ideal.y;
+  foot[id].stepping = true; foot[id].t = 0;
 }
 
-// 2-bone IK: returns knee/elbow joint position
+// 2-bone IK — returns knee joint in WORLD coords
 function solveIK(ax, ay, fx, fy, l1, l2) {
-  const dx = fx - ax, dy = fy - ay;
-  let d = Math.sqrt(dx * dx + dy * dy);
-  d = Math.min(d, l1 + l2 - 0.01);
-  const cosA = (d * d + l1 * l1 - l2 * l2) / (2 * d * l1);
-  const a1 = Math.acos(Math.max(-1, Math.min(1, cosA)));
-  const baseA = Math.atan2(dy, dx);
-  return {
-    kx: ax + l1 * Math.cos(baseA - a1),
-    ky: ay + l1 * Math.sin(baseA - a1)
-  };
+  const dx = fx-ax, dy = fy-ay;
+  let d = Math.sqrt(dx*dx + dy*dy);
+  d = Math.min(d, l1+l2-0.1);
+  const cosA = Math.max(-1, Math.min(1, (d*d+l1*l1-l2*l2)/(2*d*l1)));
+  const a1 = Math.acos(cosA);
+  const base = Math.atan2(dy,dx);
+  return { kx: ax + l1*Math.cos(base-a1), ky: ay + l1*Math.sin(base-a1) };
 }
 
-// Write one leg's three line segments into SVG
-function writeLeg(id, ax, ay, fx, fy, liftPx) {
-  const fya = fy - liftPx;
-  const { kx, ky } = solveIK(ax, ay, fx, fya, L1, L2);
-  // tarsus tip direction
-  const ta = Math.atan2(fya - ky, fx - kx);
-  const tx = fx + Math.cos(ta) * L3;
-  const ty = fya + Math.sin(ta) * L3;
+// Write leg lines. Coords are WORLD; we subtract (bx-C, by-C) to get SVG space.
+function drawLeg(id, axW, ayW, fxW, fyW, lift) {
+  const fyA = fyW - lift;
+  const {kx,ky} = solveIK(axW, ayW, fxW, fyA, SEG1, SEG2);
+  const ta = Math.atan2(fyA-ky, fxW-kx);
+  const txW = fxW + Math.cos(ta)*SEG3;
+  const tyW = fyA + Math.sin(ta)*SEG3;
 
-  const setL = (el, x1, y1, x2, y2) => {
-    el.setAttribute('x1', (x1 + SVG_CX).toFixed(2));
-    el.setAttribute('y1', (y1 + SVG_CY).toFixed(2));
-    el.setAttribute('x2', (x2 + SVG_CX).toFixed(2));
-    el.setAttribute('y2', (y2 + SVG_CY).toFixed(2));
-  };
+  // Convert world → SVG: offset = (bx - C), (by - C)
+  const ox = bx - C, oy = by - C;
+  function setLine(el, x1,y1,x2,y2){
+    el.setAttribute('x1',(x1-ox).toFixed(1)); el.setAttribute('y1',(y1-oy).toFixed(1));
+    el.setAttribute('x2',(x2-ox).toFixed(1)); el.setAttribute('y2',(y2-oy).toFixed(1));
+  }
 
-  setL(document.getElementById(id + '_f'), ax, ay, kx, ky);
-  setL(document.getElementById(id + '_t'), kx, ky, fx, fya);
-  setL(document.getElementById(id + '_s'), fx, fya, tx, ty);
+  setLine(document.getElementById(id+'f'), axW,ayW, kx,ky);
+  setLine(document.getElementById(id+'t'), kx,ky, fxW,fyA);
+  setLine(document.getElementById(id+'s'), fxW,fyA, txW,tyW);
 
-  // Spines on front legs (L1 / R1)
-  if (id === 'LL1' || id === 'LR1') {
-    const sp1 = document.getElementById(id + '_sp1');
-    const sp2 = document.getElementById(id + '_sp2');
-    if (sp1 && sp2) {
-      // Spines perpendicular to femur, mid-point
-      const femA = Math.atan2(ky - ay, kx - ax);
-      const perp = femA + Math.PI / 2;
-      const mx1 = (ax + kx) / 2, my1 = (ay + ky) / 2;
-      setL(sp1, mx1, my1, mx1 + Math.cos(perp) * 4, my1 + Math.sin(perp) * 4);
-      const mx2 = (kx * 0.7 + ax * 0.3), my2 = (ky * 0.7 + ay * 0.3);
-      setL(sp2, mx2, my2, mx2 + Math.cos(perp) * 3, my2 + Math.sin(perp) * 3);
+  // Spines on front legs
+  if (id==='LL1'||id==='LR1') {
+    const p1 = document.getElementById(id+'p1');
+    const p2 = document.getElementById(id+'p2');
+    if (p1&&p2) {
+      const femA = Math.atan2(ky-ayW, kx-axW);
+      const perp = femA + Math.PI/2;
+      const mx1=(axW+kx)/2, my1=(ayW+ky)/2;
+      setLine(p1, mx1,my1, mx1+Math.cos(perp)*5, my1+Math.sin(perp)*5);
+      const mx2=axW+(kx-axW)*0.65, my2=ayW+(ky-ayW)*0.65;
+      setLine(p2, mx2,my2, mx2+Math.cos(perp)*4, my2+Math.sin(perp)*4);
     }
   }
 }
 
-const fogLayer = document.getElementById('fog-layer');
+/* ══════════════════════════════════════════
+   MAIN LOOP
+══════════════════════════════════════════ */
+const fogLayer    = document.getElementById('fog-layer');
 const heroContent = document.getElementById('hero-content');
-
-let lastTime = performance.now();
+let lastT = performance.now();
 
 function loop(now) {
   requestAnimationFrame(loop);
-  const dt = Math.min((now - lastTime) / 1000, 0.05);
-  lastTime = now;
+  const dt = Math.min((now - lastT) / 1000, 0.05);
+  lastT = now;
 
-  /* ── VIDEO SEEK — instant, throttled ── */
-  if (videoDuration > 0) {
-    const targetTime = (1 - mx / innerWidth) * videoDuration;
+  /* VIDEO SEEK */
+  if (vidDur > 0) {
     const nowMs = performance.now();
-    if (Math.abs(targetTime - lastSeeked) > 0.02 && nowMs - lastSeekTime > SEEK_INTERVAL) {
-      video.currentTime = targetTime;
-      lastSeeked = targetTime;
-      lastSeekTime = nowMs;
+    const target = (1 - rawMx / innerWidth) * vidDur;
+    if (Math.abs(target - lastSeekVal) > 0.015 && nowMs - lastSeekMs > SEEK_HZ) {
+      video.currentTime = target;
+      lastSeekVal = target;
+      lastSeekMs = nowMs;
     }
   }
 
-  /* ── SPIDER BODY FOLLOW ── */
-  smoothSpeed += (rawSpeed - smoothSpeed) * 0.3;
-  const spd01 = Math.min(smoothSpeed / 18, 1);
-  const lag = isIdle ? 0.06 : Math.min(0.18 + spd01 * 0.14, 0.32);
-  bx += (mx - bx) * lag;
-  by += (my - by) * lag;
+  /* BODY FOLLOW */
+  smoothSpd += (rawSpeed - smoothSpd) * 0.25;
+  const spd01 = Math.min(smoothSpd / 20, 1);
+  const lag = isIdle ? 0.07 : Math.min(0.20 + spd01 * 0.15, 0.38);
+  bx += (rawMx - bx) * lag;
+  by += (rawMy - by) * lag;
 
-  /* ── ANGLE ── */
-  if (smoothSpeed > 1) {
-    const a = Math.atan2(my - (by - (my - by) * 0.1), mx - (bx - (mx - bx) * 0.1)) * 180 / Math.PI + 90;
-    let d = a - bAngle;
-    while (d > 180) d -= 360; while (d < -180) d += 360;
-    tAngle = bAngle + d;
+  /* ANGLE */
+  if (smoothSpd > 1.5) {
+    const a = Math.atan2(rawMy - by, rawMx - bx) * 180/Math.PI + 90;
+    let d = a - bAng;
+    while(d>180)d-=360; while(d<-180)d+=360;
+    tAng = bAng + d;
   }
-  let ad = tAngle - bAngle;
-  while (ad > 180) ad -= 360; while (ad < -180) ad += 360;
-  bAngle += ad * Math.min(0.12 + spd01 * 0.08, 0.2);
+  let ad = tAng - bAng;
+  while(ad>180)ad-=360; while(ad<-180)ad+=360;
+  bAng += ad * Math.min(0.10 + spd01*0.10, 0.22);
 
-  /* ── IDLE / BREATH ── */
-  idleBreath += 0.028;
-  frontRaise += (tFrontRaise - frontRaise) * 0.1;
+  breathT += 0.028;
+  frontRaise += (tFrontRaise - frontRaise) * 0.10;
 
-  /* ── STEPPING GAIT ── */
-  const stepDur = Math.max(0.10, 0.20 - spd01 * 0.10);
-  if (stepCooldown > 0) stepCooldown -= dt;
+  /* GAIT */
+  const stepDur = Math.max(0.09, 0.22 - spd01*0.13);
+  if (stepCD > 0) stepCD -= dt;
 
-  if (stepCooldown <= 0 && spd01 > 0.04) {
-    const grp = grpATurn ? GRP_A : GRP_B;
-    let anyNeeded = false;
+  if (stepCD <= 0 && spd01 > 0.05) {
+    const grp = gaTurn ? GA : GB;
+    let need = false;
     grp.forEach(id => {
       if (!foot[id].stepping) {
-        const ideal = idealFoot(id);
-        if (dist2(foot[id].wx, foot[id].wy, ideal.x, ideal.y) > STEP_TRIGGER) {
-          anyNeeded = true;
-        }
+        if (dst(foot[id].wx, foot[id].wy, idealFoot(id).x, idealFoot(id).y) > STEP_THRESH)
+          need = true;
       }
     });
-    if (anyNeeded) {
+    if (need) {
       grp.forEach(id => { if (!foot[id].stepping) triggerStep(id); });
-      grpATurn = !grpATurn;
-      stepCooldown = stepDur * 0.55;
+      gaTurn = !gaTurn;
+      stepCD = stepDur * 0.5;
     }
   }
 
-  /* ── ADVANCE STEPS ── */
+  /* ADVANCE STEPS */
   Object.keys(foot).forEach(id => {
     const f = foot[id];
     if (f.stepping) {
       f.t += dt / stepDur;
-      if (f.t >= 1) { f.t = 1; f.stepping = false; f.wx = f.tx; f.wy = f.ty; }
-      else {
-        const ease = f.t < 0.5 ? 2 * f.t * f.t : 1 - Math.pow(-2 * f.t + 2, 2) / 2;
-        f.wx = f.px + (f.tx - f.px) * ease;
-        f.wy = f.py + (f.ty - f.py) * ease;
-        f.lift = LEG_LIFT_H * Math.sin(f.t * Math.PI) * (1 + spd01 * 0.5);
+      if (f.t >= 1) {
+        f.t = 1; f.stepping = false; f.wx = f.tx; f.wy = f.ty;
+      } else {
+        const e = f.t < 0.5 ? 2*f.t*f.t : 1-Math.pow(-2*f.t+2,2)/2;
+        f.wx = f.px + (f.tx-f.px)*e;
+        f.wy = f.py + (f.ty-f.py)*e;
+        f.lift = LEG_LIFT * Math.sin(f.t*Math.PI) * (1 + spd01*0.6);
       }
     } else {
-      f.lift *= 0.75;
-      // Idle micro-twitch
+      f.lift *= 0.7;
       if (isIdle) {
-        const ideal = idealFoot(id);
-        f.wx += (ideal.x - f.wx) * 0.04;
-        f.wy += (ideal.y - f.wy) * 0.04;
+        const id2 = idealFoot(id);
+        f.wx += (id2.x - f.wx) * 0.03;
+        f.wy += (id2.y - f.wy) * 0.03;
       }
     }
   });
 
-  /* ── RENDER LEGS (in SVG-local space = world - body + origin) ── */
-  const rad = bAngle * Math.PI / 180;
-  Object.keys(ATTACH).forEach(id => {
-    const a = ATTACH[id];
-    const rp = rotPt(a.lx, a.ly, rad);
-    // SVG-local attach (relative to spider SVG origin = bx,by)
-    const lax = rp.x;
-    const lay = rp.y;
-    // SVG-local foot
-    const lfx = foot[id].wx - bx;
-    const lfy = foot[id].wy - by;
-
+  /* RENDER LEGS */
+  const rad = bAng * Math.PI / 180;
+  Object.keys(ATT).forEach(id => {
+    const a = ATT[id];
+    const rp = rot(a.lx, a.ly, rad);
+    const axW = bx + rp.x;
+    const ayW = by + rp.y;
     let extraLift = 0;
-    if ((id === 'LL1' || id === 'LR1') && frontRaise > 0) extraLift = frontRaise * 14;
-
-    writeLeg(id, lax, lay, lfx, lfy, foot[id].lift + extraLift);
+    if ((id==='LL1'||id==='LR1') && frontRaise > 0) extraLift = frontRaise * 16;
+    drawLeg(id, axW, ayW, foot[id].wx, foot[id].wy, foot[id].lift + extraLift);
   });
 
-  /* ── TRANSFORM SPIDER ── */
-  const sc = isIdle ? 1 + Math.sin(idleBreath) * 0.014 : 1 + spd01 * 0.04;
-  spiderEl.style.transform =
-    `translate(${(bx - SVG_CX).toFixed(1)}px,${(by - SVG_CY).toFixed(1)}px) scale(${sc.toFixed(3)})`;
+  /* MOVE WHOLE SVG WRAPPER so (100,100) in SVG = (bx,by) in screen */
+  const sc = isIdle ? 1 + Math.sin(breathT)*0.013 : 1 + spd01*0.038;
+  wrap.style.transform = `translate(${(bx-C).toFixed(1)}px,${(by-C).toFixed(1)}px) scale(${sc.toFixed(3)})`;
 
-  /* ── PARALLAX ── */
-  const px = (mx / innerWidth  - 0.5) * 14;
-  const py = (my / innerHeight - 0.5) * 9;
+  /* PARALLAX */
+  const px = (rawMx/innerWidth  - 0.5) * 14;
+  const py = (rawMy/innerHeight - 0.5) * 9;
   heroContent.style.transform = `translateY(-50%) translate(${px.toFixed(1)}px,${py.toFixed(1)}px)`;
-  fogLayer.style.transform    = `translate(${(px * 1.8).toFixed(1)}px,${(py * 1.2).toFixed(1)}px)`;
+  fogLayer.style.transform    = `translate(${(px*1.8).toFixed(1)}px,${(py*1.2).toFixed(1)}px)`;
 }
 
 requestAnimationFrame(loop);
 
-/* ── NAV / MODAL ── */
+/* EVENTS */
 document.querySelectorAll('button,a,.hero-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => { tFrontRaise = 1; });
-  el.addEventListener('mouseleave', () => { tFrontRaise = 0; });
+  el.addEventListener('mouseenter', () => tFrontRaise = 1);
+  el.addEventListener('mouseleave', () => tFrontRaise = 0);
 });
-document.addEventListener('mousemove', () => {
-  isIdle = false; clearTimeout(idleT);
-  idleT = setTimeout(() => { isIdle = true; }, 1400);
-}, { passive: true });
+window.addEventListener('mousemove', () => {
+  isIdle = false; clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => isIdle = true, 1400);
+}, { passive:true });
 
-function toggleNav() {
-  document.getElementById('nav-menu').classList.toggle('open');
-  document.getElementById('hamburger').classList.toggle('open');
-}
-function closeNav() {
-  document.getElementById('nav-menu').classList.remove('open');
-  document.getElementById('hamburger').classList.remove('open');
-}
-function openModal()  { document.getElementById('modal-overlay').classList.add('open'); }
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
-function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
-if ('ontouchstart' in window) document.getElementById('spider-cursor').style.display = 'none';
+function toggleNav(){document.getElementById('nav-menu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
+function closeNav(){document.getElementById('nav-menu').classList.remove('open');document.getElementById('hamburger').classList.remove('open');}
+function openModal(){document.getElementById('modal-overlay').classList.add('open');}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function closeModalOutside(e){if(e.target.id==='modal-overlay')closeModal();}
+if('ontouchstart'in window)document.getElementById('spider-wrap').style.display='none';
 </script>
 </body>
 </html>
